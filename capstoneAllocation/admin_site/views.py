@@ -7,16 +7,16 @@ from django.http import HttpResponse
 # Create your views here.
 
 def index(request):
-	return HttpResponse("Hello, world. You're at the admin login page.")
+	return render(request, 'admin/login.html')
 
 def floorplan(request):
-	return HttpResponse("floorplan page")
+	return render(request, 'admin/floorplan.html')
 
 def approveConfirmation(request):
-	return HttpResponse("approved confirmation page")
+	return render(request, 'admin/approve.html')
 
 def editAllocation(request):
-	return HttpResponse("edit floorplan page")
+	return render(request, 'admin/edit.html')
 
 def viewRequirements(request):
-	return HttpResponse("view requests page")
+	return render(request, 'admin/view.html')

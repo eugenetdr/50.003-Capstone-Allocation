@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Team(models.Model):
 
@@ -24,3 +25,9 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class UserProfileInfo(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.user.username
