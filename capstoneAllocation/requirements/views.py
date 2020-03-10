@@ -27,8 +27,8 @@ def index(request):
 
 @login_required
 def spaceRequest(request):
-	team = Team.objects.get(teamID=team_id)
-	return HttpResponse("{} request page".format(team))
+	# team = Team.objects.get(teamID=team_id)
+	return HttpResponse("request page")
 
 @login_required
 def confirmation(request, team_id):
