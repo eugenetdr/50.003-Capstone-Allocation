@@ -6,6 +6,19 @@
   </head>
   <body>
     <p>Login</p>
-    <button onclick="location.href='/admin/floorplan/'" type="button">login</button>
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Admin Login here :</h1>
+            <form method="post" action="{% url 'adminIndex' %}">
+              {% csrf_token %}
+              {# A more "HTML" way of creating the login form#}
+              <label for="username">Username:</label>
+              <input type="text" name="username" placeholder="Username">
+              <label for="password">Password:</label>
+              <input type="password" name="password" placeholder="Password">
+              <input type="submit" name="" value="Login">
+            </form>
+      </div>
+    </div>
   </body>
 </html>
