@@ -2,10 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>Review</title>
   </head>
   <body>
-    <p>Login</p>
-    <button onclick="location.href='/requirements/'" type="button">login</button>
-  </body>
+    <p>Review</p>
+    <button onclick="location.href='{% url 'spaceRequest' teamID active %}'" type="button">Edit</button>
+    <button onclick="location.href='{% url 'studentLogout' teamID %}'" type="button">Logout</button>
+  
 </html>

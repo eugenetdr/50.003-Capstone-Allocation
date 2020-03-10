@@ -6,8 +6,9 @@
   </head>
   <body>
   	<p>Home</p>
-    <button onclick="location.href='/admin/floorplan/requirements'" type="button">View Requirements</button>
-    <button onclick="location.href='/admin/floorplan/edit'" type="button">Edit</button>
-    <button onclick="location.href='/admin/floorplan/confirmation'" type="button">Approve</button>
+    <button onclick="location.href='{% url 'requirements' adminID active %}'" type="button">View Requirements</button>
+    <button onclick="location.href='{% url 'edit' adminID active %}'" type="button">Edit</button>
+    <button onclick="location.href='{% url 'approve' adminID active %}'" type="button">Approve</button>
+    <button onclick="location.href='{% url 'logout' adminID %}'" type="button">Logout</button>
   </body>
 </html>
