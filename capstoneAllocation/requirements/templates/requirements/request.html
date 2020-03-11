@@ -1,11 +1,96 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
+
     <meta charset="utf-8">
-    <title>Login</title>
+    <title>RequestPage</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
+
   <body>
-    <p>Login</p>
-    <button onclick="location.href='/requirements/<int:team_id>'" type="button">login</button>
+    <p>Request Page</p>
+
+    
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+    
+        <!-- Icon -->
+        <div class="fadeIn first">
+          <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
+        </div>
+    
+        <!-- Login Form -->
+        <form method="post" action="{% url 'checkForm' %}">
+          {% csrf_token %}
+          <p>Representative Email:</p>
+          <input type="text" id="representativeEmail" class="fadeIn second" name="representativeEmail" placeholder="example@mail.com">
+          <input type="text" id="projectName" class="fadeIn third" name="projectName" placeholder="Flying Robocoaster">
+          <p>Type of Prototype:</p>
+          <div>
+            <input type="radio" id="prototypeType1"
+            name="prototypeType" value = "1:1"><label>1:1</label><br>
+        
+            <input type="radio" id="prototypeType2"
+             name="prototypeType" value = "Scaled Prototype"><label>Scaled Prototype</label><br>
+        
+            <input type="radio" id="prototypeType3"
+             name="prototypeType" value = "Software Prototype"><label>Software Prototype</label><br>
+
+            <input type="radio" id="prototypeType4"
+            name="prototypeType" value = "Partial Prototype"><label>Partial Prototype</label><br>
+            
+            <input type="radio" name = "prototypeType" id="prototypeType5" value="" placeholder="Enter Type of Prototype">Other Prototype Type<input type="text" name="otherType" />
+
+
+          </div><br>
+ 
+          <div>
+            <input type="radio" id="prototypeSize1"
+            name="prototypeSize" value = "Small"><label>Small</label><br>
+        
+            <input type="radio" id="prototypeSize2"
+             name="prototypeSize" value = "Medium"><label>Medium</label><br>
+        
+            <input type="radio" id="prototypeSize3"
+             name="prototypeSize" value = "Large"><label>Large</label><br>
+
+            <input type="radio" name = "prototypeSize" id="prototypeSize4" value="" placeholder="Enter Type of Prototype">Other Prototype Dimensions<br><input type="number" name="otherLength" placeholder="Length"/>x<input type="number" name="otherWidth" placeholder="Width"/>x<input type="number" name="otherHeight" placeholder="Height"/>
+          </div><br>
+          <input type="text" id="prototypeLength" class="fadeIn third" name="prototypeLength" placeholder="Length of Prototype">
+          <input type="text" id="prototypeWidth" class="fadeIn third" name="prototypeWidth" placeholder="Width of Prototype">
+          <input type="text" id="prototypeHeight" class="fadeIn third" name="prototypeHeight" placeholder="Height of Prototype">
+          
+          <input type="text" id="showcaseLength" class="fadeIn third" name="showcaseLength" placeholder="Length of Showcase">
+          <input type="text" id="showcaseWidth" class="fadeIn third" name="showcaseWidth" placeholder="Width of Showcase">
+          <input type="text" id="showcaseHeight" class="fadeIn third" name="showcaseHeight" placeholder="Height of Showcase">
+          
+          <input type="text" id="powerpoints" class="fadeIn third" name="powerpoints" placeholder="Number of Powerpoints needed">
+          <input type="text" id="bigPedestals" class="fadeIn third" name="bigPedestals" placeholder="Number of Big Pedestals needed">
+          <input type="text" id="smallPedestals" class="fadeIn third" name="smallPedestals" placeholder="Number of Small Pedestals">
+          <input type="text" id="pedestalDescription" class="fadeIn third" name="pedestalDescription" placeholder="Why do you need the Pedestal(s)">
+          <input type="text" id="monitors" class="fadeIn third" name="monitors" placeholder="Number of Monitors/Screens needed">
+          <input type="text" id="TVs" class="fadeIn third" name="TVs" placeholder="Number of TVs needed">
+          <input type="text" id="tables" class="fadeIn third" name="tables" placeholder="Number of Tables needed">
+          <input type="text" id="chairs" class="fadeIn third" name="chairs" placeholder="Number of Chairs needed">
+          <input type="text" id="HDMIAdaptors" class="fadeIn third" name="HDMIAdaptors" placeholder="Number of HDMI Adaptors needed">
+          <input type="text" id="others" class="fadeIn third" name="others" placeholder="Other Requirements">
+          <input type="text" id="remarks" class="fadeIn third" name="remarks" placeholder="Any Further Remarks">
+          <input type="submit" class="fadeIn fourth" value="Submit Space Request">
+        </form>
+    
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+          <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+    
+      </div>
+    </div>
+
+    <button onclick="location.href='/requirements/confirmation'" type="button">Confirm Request</button>
   </body>
 </html>

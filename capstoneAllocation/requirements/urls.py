@@ -9,7 +9,11 @@ urlpatterns = [
     # ex: /requirements/5/
     path('<int:team_id>/', views.spaceRequest, name='spaceRequest'),
     # ex: /requirements/5/confirmation/
-    path('<int:team_id>/confirmation/', views.confirmation, name='confirmation'),
+    path('confirmation/', views.confirmation, name='confirmation'),
     # ex: /requirements/5/review/
-    path('<int:team_id>/review/', views.review, name='review'),
+    path('review/', views.review, name='review'),
+    # ex: /requirements/5/review/
+    #path('checkForm/', views.checkForm, name='checkForm')
+
+    path('checkForm/', views.checkForm, name='checkForm')
 ]
