@@ -20,16 +20,13 @@
         <!-- Tabs Titles -->
     
         <!-- Icon -->
-        <div class="fadeIn first">
-          <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="User Icon" />
-        </div>
     
         <!-- Login Form -->
         <form method="post" action="{% url 'checkForm' %}">
           {% csrf_token %}
           <p>Representative Email:</p>
-          <input type="text" id="representativeEmail" class="fadeIn second" name="representativeEmail" placeholder="example@mail.com">
-          <input type="text" id="projectName" class="fadeIn third" name="projectName" placeholder="Flying Robocoaster">
+          <input type="text" id="representativeEmail" class="fadeIn second" name="representativeEmail" placeholder="Representative Email">
+          <input type="text" id="projectName" class="fadeIn third" name="projectName" placeholder="Project Name">
           <p>Type of Prototype:</p>
           <div>
             <input type="radio" id="prototypeType1"
@@ -44,42 +41,73 @@
             <input type="radio" id="prototypeType4"
             name="prototypeType" value = "Partial Prototype"><label>Partial Prototype</label><br>
             
-            <input type="radio" name = "prototypeType" id="prototypeType5" value="" placeholder="Enter Type of Prototype">Other Prototype Type<input type="text" name="otherType" />
-
+            <input type="radio" name = "prototypeType" id="prototypeType5" value="Custom Type" placeholder="Enter Type of Prototype">Other Prototype Type<input type="text" name = "prototypeType" />
 
           </div><br>
- 
+
+          <p>Dimensions of Prototype:</p>
           <div>
-            <input type="radio" id="prototypeSize1"
+            <input onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize1"
             name="prototypeSize" value = "Small"><label>Small</label><br>
         
-            <input type="radio" id="prototypeSize2"
+            <input onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize2"
              name="prototypeSize" value = "Medium"><label>Medium</label><br>
         
-            <input type="radio" id="prototypeSize3"
+            <input onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize3"
              name="prototypeSize" value = "Large"><label>Large</label><br>
 
-            <input type="radio" name = "prototypeSize" id="prototypeSize4" value="" placeholder="Enter Type of Prototype">Other Prototype Dimensions<br><input type="number" name="otherLength" placeholder="Length"/>x<input type="number" name="otherWidth" placeholder="Width"/>x<input type="number" name="otherHeight" placeholder="Height"/>
+            <input onclick="document.getElementById('prototypeLength').disabled = false;document.getElementById('prototypeWidth').disabled = false;document.getElementById('prototypeHeight').disabled = false;" type="radio" name = "prototypeSize" id="prototypeSize4" value="otherProtoSize">Custom Prototype Dimensions<br>
+
+            <input id = "prototypeLength" type="number" name="prototypeSize1" placeholder="Length"/>x
+
+            <input id = "prototypeWidth" type="number" name="prototypeSize2" placeholder="Width"/>x
+            
+            <input id = "prototypeHeight" type="number" name="prototypeSize3" placeholder="Height"/>
+          
           </div><br>
-          <input type="text" id="prototypeLength" class="fadeIn third" name="prototypeLength" placeholder="Length of Prototype">
-          <input type="text" id="prototypeWidth" class="fadeIn third" name="prototypeWidth" placeholder="Width of Prototype">
-          <input type="text" id="prototypeHeight" class="fadeIn third" name="prototypeHeight" placeholder="Height of Prototype">
+
+          <p>Dimensions of Showcase:</p>
+          <div>
+            <input onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showcaseSize1"
+            name="showcaseSize" value = "Small"><label>Small</label><br>
+        
+            <input onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showcaseSize2"
+             name="showcaseSize" value = "Medium"><label>Medium</label><br>
+        
+            <input onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showcaseSize3"
+             name="showcaseSize" value = "Large"><label>Large</label><br>
+
+            <input onclick="document.getElementById('showCaseLength').disabled = false;document.getElementById('showCaseWidth').disabled = false;document.getElementById('showCaseHeight').disabled = false;" type="radio" name = "showcaseSize" id="showcaseSize4" value="OtherShowcaseSize">Custom Showcase Dimensions<br>
+            <input id = "showCaseLength" type="number" name="showcaseSize" placeholder="Length"/>x
+
+            <input id = "showCaseWidth" type="number" name="showcaseSize" placeholder="Width"/>x
+
+            <input id = "showCaseHeight" type="number" name="showcaseSize" placeholder="Height"/>
           
-          <input type="text" id="showcaseLength" class="fadeIn third" name="showcaseLength" placeholder="Length of Showcase">
-          <input type="text" id="showcaseWidth" class="fadeIn third" name="showcaseWidth" placeholder="Width of Showcase">
-          <input type="text" id="showcaseHeight" class="fadeIn third" name="showcaseHeight" placeholder="Height of Showcase">
+          </div><br>
+
+          <input type="number" class="fadeIn third" id = "powerpoints" name = "powerpoints" placeholder = "Number of Powerpoints needed"><br>
           
-          <input type="text" id="powerpoints" class="fadeIn third" name="powerpoints" placeholder="Number of Powerpoints needed">
-          <input type="text" id="bigPedestals" class="fadeIn third" name="bigPedestals" placeholder="Number of Big Pedestals needed">
-          <input type="text" id="smallPedestals" class="fadeIn third" name="smallPedestals" placeholder="Number of Small Pedestals">
-          <input type="text" id="pedestalDescription" class="fadeIn third" name="pedestalDescription" placeholder="Why do you need the Pedestal(s)">
-          <input type="text" id="monitors" class="fadeIn third" name="monitors" placeholder="Number of Monitors/Screens needed">
-          <input type="text" id="TVs" class="fadeIn third" name="TVs" placeholder="Number of TVs needed">
-          <input type="text" id="tables" class="fadeIn third" name="tables" placeholder="Number of Tables needed">
-          <input type="text" id="chairs" class="fadeIn third" name="chairs" placeholder="Number of Chairs needed">
-          <input type="text" id="HDMIAdaptors" class="fadeIn third" name="HDMIAdaptors" placeholder="Number of HDMI Adaptors needed">
-          <input type="text" id="others" class="fadeIn third" name="others" placeholder="Other Requirements">
-          <input type="text" id="remarks" class="fadeIn third" name="remarks" placeholder="Any Further Remarks">
+          <input type="number" class="fadeIn third" id = "bigPedestals" name = "bigPedestals" placeholder = "Number of Big Pedestals needed"><br>
+
+          <input type="number" class="fadeIn third" id = "smallPedestals" name = "smallPedestals" placeholder = "Number of Small Pedestals needed"><br>
+
+          <input type="text" id="pedestalDescription" class="fadeIn third" name="pedestalDescription" placeholder="Why do you need the Pedestal(s)"><br>
+
+          <input type="number" class="fadeIn third" id = "monitors" name = "monitors" placeholder = "Number of Monitors/Screens needed"><br>
+
+          <input type="number" class="fadeIn third" id = "TVs" name = "TVs" placeholder = "Number of TVs needed"><br>
+
+          <input type="number" class="fadeIn third" id = "tables" name = "tables" placeholder = "Number of Tables needed"><br>
+
+          <input type="number" class="fadeIn third" id = "chairs" name = "chairs" placeholder = "Number of Chairs needed"><br>
+ 
+          <input type="number" class="fadeIn third" id = "HDMIAdaptors" name = "HDMIAdaptors" placeholder = "Number of HDMI Adaptors needed"><br>
+
+          <input type="text" id="others" class="fadeIn third" name="others" placeholder="Other Requirements"><br>
+
+          <input type="text" id="remarks" class="fadeIn third" name="remarks" placeholder="Any Further Remarks"><br>
+
           <input type="submit" class="fadeIn fourth" value="Submit Space Request">
         </form>
     
