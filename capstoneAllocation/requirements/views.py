@@ -6,7 +6,9 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
 from .models import Team
-from .form_input_checks import check_email, check_number, check_general_string, catch_no_input, prototype_size_dictionary, showcase_size_dictionary
+
+prototype_size_dictionary = {"Small": [1,1,1], "Medium": [1.5,1.5,1.5], "Large": [2,2,2]}
+showcase_size_dictionary = {"Small": [1.2,1.2,1.2], "Medium": [1.7,1.7,1.7], "Large":[2.2,2.2,2.2]}
 
 def index(request):
 	if request.method == 'POST':
@@ -24,6 +26,7 @@ def index(request):
 			print("They used username: {} and password: {}".format(username,password))
 			return HttpResponse("Invalid login details given")
 	else:
+		#return render(request, 'requirements/login.html', {"contextDict": default_context})
 		return render(request, 'requirements/login.html')
 
 #@login_required
@@ -33,64 +36,43 @@ def spaceRequest(request):
 
 #@login_required
 def checkForm(request):
-	#print(request.POST["prototypeSize"])
-	#placeholder comment
-	#print(request.POST['representativeEmail'])
-	#print("This is the checkform request")
-	testresults = []
+	keys = list((request.POST).keys())
+	API_dict = {}
 
-	print(check_number(1))
+	if(request.POST["prototypeType"] == 'Custom Type'):
+		API_dict["prototypeType"] = request.POST["prototypeCustom"]
+	else:
+		API_dict["prototypeType"] = request.POST["prototypeType"]
 
-	#we can test all variables individually except for prototypeSize and showcaseSize. For these, we need to go deeper
-	variables_functions = {'representativeEmail': check_email,'projectName': check_general_string,'prototypeType': check_general_string,'powerpoints': check_number,'bigPedestals':check_number,'smallPedestals':check_number,'pedestalDescription':check_general_string,'monitors':check_number,\
-	'TVs':check_number,'tables':check_number,'chairs':check_number,'HDMIAdaptors':check_number, 'others':check_general_string}
-	variables = list(variables_functions.keys())
-	for var in variables:
-		testresults.append(catch_no_input(variables_functions[var], request, var))
-	#Now we need to check for prototypeSize and showcaseSize
-	try:
-		if(request.POST["prototypeSize"] == "otherProtoSize"):
-			testresults.append(catch_no_input(check_number, request, "prototypeSize1"))
-			testresults.append(catch_no_input(check_number, request, "prototypeSize2"))
-			testresults.append(catch_no_input(check_number, request, "prototypeSize3"))
-		else:
-			try:
-				prototypeSize = request.POST["prototypeSize"]
-				size_array = prototype_size_dictionary[prototypeSize]
-				testresults.append(check_number(size_array[0]))
-				testresults.append(check_number(size_array[1]))
-				testresults.append(check_number(size_array[2]))
-			except KeyError:
-				testresults.append(False)
-				testresults.append(False)
-				testresults.append(False)
-	except MultiValueDictKeyError:
-		testresults.append(False)
-		testresults.append(False)
-		testresults.append(False)
+	if(request.POST["prototypeSize"] == "OtherProtoSize"):
+		API_dict["prototypeLength"] = float(request.POST["prototypeSize1"])
+		API_dict["prototypeWidth"] = float(request.POST["prototypeSize2"])
+		API_dict["prototypeHeight"] = float(request.POST["prototypeSize3"])
+	else:
+		protosize = prototype_size_dictionary[request.POST["prototypeSize"]]
+		API_dict["prototypeLength"] = protosize[0]
+		API_dict["prototypeWidth"] = protosize[1]
+		API_dict["prototypeHeight"] = protosize[2]
+
+	if(request.POST["showcaseSize"] == "OtherShowcaseSize"):
+		API_dict["showcaseLength"] = float(request.POST["showcaseSize1"])
+		API_dict["showcaseWidth"] = float(request.POST["showcaseSize2"])
+		API_dict["showcaseHeight"] = float(request.POST["showcaseSize3"])
+	else:
+		showsize = prototype_size_dictionary[request.POST["showcaseSize"]]
+		API_dict["showcaseLength"] = showsize[0]
+		API_dict["showcaseWidth"] = showsize[1]
+		API_dict["showcaseHeight"] = showsize[2]
 	
-	try:
-		if(request.POST["showcaseSize"] == "otherShowcaseSize"):
-			testresults.append(catch_no_input(check_number, request, "showcaseSize1"))
-			testresults.append(catch_no_input(check_number, request, "showcaseSize2"))
-			testresults.append(catch_no_input(check_number, request, "showcaseSize3"))
-		else:
-			try:
-				prototypeSize = request.POST["showcaseSize"]
-				size_array = showcase_size_dictionary[prototypeSize]
-				testresults.append(check_number(size_array[0]))
-				testresults.append(check_number(size_array[1]))
-				testresults.append(check_number(size_array[2]))
-			except KeyError:
-				testresults.append(False)
-				testresults.append(False)
-				testresults.append(False)
-	except MultiValueDictKeyError:
-		testresults.append(False)
-		testresults.append(False)
-		testresults.append(False)
-	print(testresults)
-	#comment for test
+	numerical_inputs = ["powerpoints", "bigPedestals", "smallPedestals", "monitors", "TVs", "tables", "chairs", "HDMIAdaptors"]
+	text_inputs = ["representativeEmail", "projectName", "pedestalDescription", "others", "remarks"]
+	for column in text_inputs:
+		API_dict[column] = request.POST[column]
+	for column in numerical_inputs:
+		API_dict[column] = float(request.POST[column])
+	print(API_dict)
+	#Right now just reloads an empty form. 
+	#TODO: Pass API_dict to backend API to store in database
 	return render(request, 'requirements/request.html')
 
 #@login_required

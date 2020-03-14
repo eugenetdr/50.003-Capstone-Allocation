@@ -14,6 +14,5 @@ urlpatterns = [
     path('review/', views.review, name='review'),
     # ex: /requirements/5/review/
     #path('checkForm/', views.checkForm, name='checkForm')
-
     path('checkForm/', views.checkForm, name='checkForm')
 ]
