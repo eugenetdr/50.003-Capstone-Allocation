@@ -214,10 +214,10 @@ class run_Algorithm:
 
         with open('projects_file.csv', mode='w') as project_file:
             project_writer = csv.writer(project_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            header = ["FloorSpaceID","Placed","Name","Length","Width","Position"]
+            header = ["FloorSpaceID","Placed","Name","Length","Width","Position X","Position Y"]
             project_writer.writerow(header)
             for x in project_Array:
-                ls = [x.project_FloorSpaceID,x.project_Placed,x.project_Name,x.project_Length,x.project_Width,x.project_Position]
+                ls = [x.project_FloorSpaceID,x.project_Placed,x.project_Name,x.project_Length,x.project_Width,x.project_Position[0],x.project_Position[1]]
                 try:
                     project_writer.writerow(ls)
                 except:
