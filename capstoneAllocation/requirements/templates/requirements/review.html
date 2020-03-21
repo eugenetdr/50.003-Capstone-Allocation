@@ -1,11 +1,43 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8">
     <title>Review</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
     <p>Review</p>
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <form novalidate method="post" action="{% url 'spaceRequest' %}"> 
+        {% csrf_token %}
+        {# A more "HTML" way of creating the login form#}
+          <br>
+          <input type="text" class="fadeIn third" value = "Project Name: {{ projectName }}" readonly>
+          <input type="text" class="fadeIn third" value = "Type of Prototype: {{ prototypeType }}" readonly>
+          <input type="text" class="fadeIn third" value = "Representative Email: {{ representativeEmail }}" readonly>
+          <input type="text" class="fadeIn third" value = "Prototype Dimensions(L x W x H): {{ prototypeLength }} x {{ prototypeWidth }} x {{prototypeHeight}}" readonly>
+          <input type="text" class="fadeIn third" value = "Showcase Dimensions(L x W x H): {{ showcaseLength }} x {{ showcaseWidth }} x {{ showcaseHeight }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Powerpoints: {{ powerpoints }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Big Pedestals: {{ bigPedestals }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Small Pedestal: {{ smallPedestals }}" readonly>
+          <input type="text" class="fadeIn third" value = "Why you require the pedestals: {{ pedestalDescription }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Monitors: {{ monitors }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of TVs: {{ TVs }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Tables: {{ tables }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Chairs: {{ chairs }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of HDMI Adaptors: {{ HDMIAdaptors }}" readonly>
+          <input type="text" class="fadeIn third" value = "Other Requirements: {{ others }}" readonly>
+          <input type="text" class="fadeIn third" value = "Remarks: {{ remarks }}" readonly>
+          <input required type="submit" class="fadeIn fourth" value="Edit Request">
+          <br>
+        </form>
+      </div>
+    </div>
     <button onclick="location.href='/requirements/'" type="button">login</button>
   </body>
 </html>

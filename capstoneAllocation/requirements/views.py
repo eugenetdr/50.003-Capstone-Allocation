@@ -73,7 +73,7 @@ def checkForm(request):
 	print(API_dict)
 	#Right now just reloads an empty form. 
 	#TODO: Pass API_dict to backend API to store in database
-	return render(request, 'requirements/request.html')
+	return render(request, 'requirements/confirmation.html')
 
 #@login_required
 def confirmation(request):
@@ -85,4 +85,7 @@ def confirmation(request):
 def review(request):
 	#team = Team.objects.get(teamID=team_id)
 	#return HttpResponse("{} review page".format(team))
-	return render(request, 'requirements/review.html')
+	return render(request, 'requirements/review.html', {'prototypeType': '1:1', 'prototypeLength': 1, 'prototypeWidth': 1,\
+	'prototypeHeight': 1, 'showcaseLength': 1, 'showcaseWidth': 1, 'showcaseHeight': 1, 'representativeEmail': 'rahulbhatta26@gmail.com',\
+	'projectName': 'JavaProj', 'pedestalDescription': '3', 'others': 'None thank you', 'remarks': 'Thanks bro', 'powerpoints': 12.0,\
+	'bigPedestals': 12.0, 'smallPedestals': 2.0, 'monitors': 4.0, 'TVs': 4.0, 'tables': 5.0, 'chairs': 6.0, 'HDMIAdaptors': 7.0})
