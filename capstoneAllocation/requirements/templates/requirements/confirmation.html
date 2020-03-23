@@ -1,11 +1,26 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Confirm</title>
+    <title>Confirmation Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-    <p>Your request has been submitted!</p>
-    <button onclick="location.href='{% url 'studentLogout' teamID %}'" type="button">Logout</button>
+    <div class="wrapper fadeInDown">
+    <div id="formContent">
+      <form novalidate method="post" action="{% url 'review' %}"> 
+      {% csrf_token %}
+      {# A more "HTML" way of creating the login form#}
+        <br>
+        <p >Team N, your space request has been sent.</p>
+        <input required type="submit" class="fadeIn fourth" value="Review Space Request">
+      </form>
+    </div>
+  </div>
+    <button onclick="location.href='/requirements/review'" type="button">Review</button>
   </body>
 </html>

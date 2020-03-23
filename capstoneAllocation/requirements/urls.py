@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 from .models import Team
 
@@ -14,4 +13,5 @@ urlpatterns = [
     path('<int:team_id>/<int:active>/confirmation/', views.confirmation, name='confirmation'),
     # ex: /requirements/5/review/
     path('<int:team_id>/<int:active>/review/', views.review, name='review'),
+    path('checkForm/', views.checkForm, name='checkForm')
 ]

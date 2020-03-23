@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
+from django.utils.datastructures import MultiValueDictKeyError
 from .models import Team
 
+prototype_size_dictionary = {"Small": [1,1,1], "Medium": [1.5,1.5,1.5], "Large": [2,2,2]}
+showcase_size_dictionary = {"Small": [1.2,1.2,1.2], "Medium": [1.7,1.7,1.7], "Large":[2.2,2.2,2.2]}
 
 def validate(username, password):
 	status = 0
@@ -39,6 +42,7 @@ def index(request):
 		else:
 			return HttpResponse("Multiple Logins Detected!")
 	else:
+		#return render(request, 'requirements/login.html', {"contextDict": default_context})
 		return render(request, 'requirements/login.html')
 
 
@@ -49,6 +53,46 @@ def spaceRequest(request, team_id, active):
 		return render(request, 'requirements/request.html',context)
 	else:
 		return redirect('requirementIndex')
+
+def checkForm(request):
+	keys = list((request.POST).keys())
+	API_dict = {}
+
+	if(request.POST["prototypeType"] == 'Custom Type'):
+		API_dict["prototypeType"] = request.POST["prototypeCustom"]
+	else:
+		API_dict["prototypeType"] = request.POST["prototypeType"]
+
+	if(request.POST["prototypeSize"] == "OtherProtoSize"):
+		API_dict["prototypeLength"] = float(request.POST["prototypeSize1"])
+		API_dict["prototypeWidth"] = float(request.POST["prototypeSize2"])
+		API_dict["prototypeHeight"] = float(request.POST["prototypeSize3"])
+	else:
+		protosize = prototype_size_dictionary[request.POST["prototypeSize"]]
+		API_dict["prototypeLength"] = protosize[0]
+		API_dict["prototypeWidth"] = protosize[1]
+		API_dict["prototypeHeight"] = protosize[2]
+
+	if(request.POST["showcaseSize"] == "OtherShowcaseSize"):
+		API_dict["showcaseLength"] = float(request.POST["showcaseSize1"])
+		API_dict["showcaseWidth"] = float(request.POST["showcaseSize2"])
+		API_dict["showcaseHeight"] = float(request.POST["showcaseSize3"])
+	else:
+		showsize = prototype_size_dictionary[request.POST["showcaseSize"]]
+		API_dict["showcaseLength"] = showsize[0]
+		API_dict["showcaseWidth"] = showsize[1]
+		API_dict["showcaseHeight"] = showsize[2]
+	
+	numerical_inputs = ["powerpoints", "bigPedestals", "smallPedestals", "monitors", "TVs", "tables", "chairs", "HDMIAdaptors"]
+	text_inputs = ["representativeEmail", "projectName", "pedestalDescription", "others", "remarks"]
+	for column in text_inputs:
+		API_dict[column] = request.POST[column]
+	for column in numerical_inputs:
+		API_dict[column] = float(request.POST[column])
+	print(API_dict)
+	#Right now just reloads an empty form. 
+	#TODO: Pass API_dict to backend API to store in database
+	return render(request, 'requirements/confirmation.html')
 
 
 def confirmation(request, team_id, active):

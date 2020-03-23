@@ -1,13 +1,132 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
+
     <meta charset="utf-8">
-    <title>Space Request</title>
+    <title>RequestPage</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+    <script src="{% static 'js/requestform.js' %}"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
+
   <body>
     <p>{{ teamID }} Request</p>
     <button onclick="location.href='{% url 'confirmation' teamID active %}'" type="button">Submit</button>
     <button onclick="location.href='{% url 'studentLogout' teamID %}'" type="button">Logout</button>
+    <p>Request Page</p>    
+    <div class="wrapper fadeInDown">
+      <div id="formContent">
+        <!-- Tabs Titles -->
+    
+        <!-- Icon -->
+    
+        <!-- Login Form -->
+        <form novalidate method="post" action="{% url 'checkForm' %}">
+          {% csrf_token %}
+          <br>
+          <p>Enter the details of your request below:</p>
+          <input required type="email" id="representativeEmail" class="fadeIn second" name="representativeEmail" placeholder="Representative Email"><br>
+          <span class="error" aria-live="polite"></span><br>
+          <input required type="text" id="projectName" class="fadeIn third" name="projectName" placeholder="Project Name"><br>
+          <span class="error" aria-live="polite"></span><br>
+          <p>Type of Prototype:</p>
+          <div>
+            <input required type="radio" id="prototypeType1" onclick="document.getElementById('prototypeCustom').disabled = true;"
+            name="prototypeType" value = "1:1"><label>1:1</label><br>
+        
+            <input required type="radio" id="prototypeType2" onclick="document.getElementById('prototypeCustom').disabled = true;"
+             name="prototypeType" value = "Scaled Prototype"><label>Scaled Prototype</label><br>
+        
+            <input required type="radio" id="prototypeType3" onclick="document.getElementById('prototypeCustom').disabled = true;"
+             name="prototypeType" value = "Software Prototype"><label>Software Prototype</label><br>
+
+            <input required type="radio" id="prototypeType4" onclick="document.getElementById('prototypeCustom').disabled = true;"
+            name="prototypeType" value = "Partial Prototype"><label>Partial Prototype</label><br>
+            
+            <input required type="radio" onclick="document.getElementById('prototypeCustom').disabled = false;" name = "prototypeType" id="prototypeType5" value="Custom Type">Other Prototype Type<br><span class="error" aria-live="polite"></span>
+            <input required id = "prototypeCustom" name = "prototypeCustom" type="text" placeholder="Enter Type of Prototype"/><br><span class="error" aria-live="polite"></span>
+
+          </div><br>
+
+          <p>Dimensions of Prototype:</p>
+          <div>
+            <input required onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize1"
+            name="prototypeSize" value = "Small"><label>Small</label><br>
+        
+            <input required onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize2"
+             name="prototypeSize" value = "Medium"><label>Medium</label><br>
+        
+            <input required onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize3"
+             name="prototypeSize" value = "Large"><label>Large</label><br>
+
+            <input required onclick="document.getElementById('prototypeLength').disabled = false;document.getElementById('prototypeWidth').disabled = false;document.getElementById('prototypeHeight').disabled = false;" type="radio" name = "prototypeSize" id="prototypeSize4" value="OtherProtoSize">Custom Prototype Dimensions<span class="error" aria-live="polite"></span><br>
+
+            <input step="any" required id = "prototypeLength" type="number" name="prototypeSize1" placeholder="Length"/><br><span class="error" aria-live="polite"></span>
+
+            <input step="any" required id = "prototypeWidth" type="number" name="prototypeSize2" placeholder="Width"/><br><span class="error" aria-live="polite"></span>
+            
+            <input step="any" required id = "prototypeHeight" type="number" name="prototypeSize3" placeholder="Height"/><br><span class="error" aria-live="polite"></span>
+          
+          </div><br>
+
+          <p>Dimensions of Showcase:</p>
+          <div>
+            <input required onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showCaseSize1"
+            name="showcaseSize" value = "Small"><label>Small</label><br>
+        
+            <input required onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showCaseSize2"
+             name="showcaseSize" value = "Medium"><label>Medium</label><br>
+        
+            <input required onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showCaseSize3"
+             name="showcaseSize" value = "Large"><label>Large</label><br>
+
+            <input required onclick="document.getElementById('showCaseLength').disabled = false;document.getElementById('showCaseWidth').disabled = false;document.getElementById('showCaseHeight').disabled = false;" type="radio" name = "showcaseSize" id="showCaseSize4" value="OtherShowcaseSize">Custom Showcase Dimensions<span class="error" aria-live="polite"></span><br>
+            
+            <input step="any" required id = "showCaseLength" type="number" name="showcaseSize1" placeholder="Length"/><br><span class="error" aria-live="polite"></span>
+
+            <input step="any" required id = "showCaseWidth" type="number" name="showcaseSize2" placeholder="Width"/><br><span class="error" aria-live="polite"></span>
+
+            <input step="any" required id = "showCaseHeight" type="number" name="showcaseSize3" placeholder="Height"/><br><span class="error" aria-live="polite"></span>
+          
+          </div><br>
+
+          <input required type="number" class="fadeIn third" id = "powerpoints" name = "powerpoints" placeholder = "Number of Powerpoints needed"><br><span class="error" aria-live="polite"></span><br>
+          
+          <input required type="number" class="fadeIn third" id = "bigPedestals" name = "bigPedestals" placeholder = "Number of Big Pedestals needed"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="number" class="fadeIn third" id = "smallPedestals" name = "smallPedestals" placeholder = "Number of Small Pedestals needed"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="text" class="fadeIn third" id = "pedestalDescription" name="pedestalDescription" placeholder="Why do you need the Pedestal(s)"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="number" class="fadeIn third" id = "monitors" name = "monitors" placeholder = "Number of Monitors/Screens needed"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="number" class="fadeIn third" id = "TVs" name = "TVs" placeholder = "Number of TVs needed"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="number" class="fadeIn third" id = "tables" name = "tables" placeholder = "Number of Tables needed"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="number" class="fadeIn third" id = "chairs" name = "chairs" placeholder = "Number of Chairs needed"><br><span class="error" aria-live="polite"></span><br>
+ 
+          <input required type="number" class="fadeIn third" id = "HDMIAdaptors" name = "HDMIAdaptors" placeholder = "Number of HDMI Adaptors needed"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="text" id="others" class="fadeIn third" name="others" placeholder="Other Requirements"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="text" id="remarks" class="fadeIn third" name="remarks" placeholder="Any Further Remarks"><br><span class="error" aria-live="polite"></span><br>
+
+          <input required type="submit" class="fadeIn fourth" value="Submit Space Request">
+        </form>
+    
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+          <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+    
+      </div>
+    </div>
+
+    <button onclick="location.href='/requirements/confirmation'" type="button">Confirm Request</button>
   </body>
 </html>
 
