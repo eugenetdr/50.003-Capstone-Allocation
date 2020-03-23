@@ -1,0 +1,69 @@
+FloorSpaceID,Placed,Name,Length,Width,Position X,Position Y
+1,True,Proj 16 - Craft Matrix_Human Powered Land Vehicles,4.0,5.0,5.0,5.0
+-1,False,Proj S11 - NHB_Spatial Autonomy,10.0,20.0,0.0,0.0
+0,True,Proj S16 - STEE_Floatsam,5.0,8.0,0.0,0.0
+2,True,Proj 12 - BCA_3D printed components,2.0,3.0,8.0,3.5
+0,True,Proj 54 - Samsung_REFARDEN,2.5,2.0,0.0,8.0
+1,True,Proj S17 - Sunflower_Nursery,5.0,5.0,0.0,0.0
+3,True,Proj S02 - Bandwagon_Music Royalty,3.0,3.0,6.5,3.2
+4,True,Proj 30 - MND_Minimizing Bird Nuisance,3.0,3.0,0.0,0.0
+0,True,Proj 09 - BCA_Mixed Mode Ventilation,2.0,2.0,5.0,8.0
+4,True,Proj 34 - My Nonna_Project CARE,1.0,2.0,9.0,0.0
+2,True,Proj S07 - Hope_Legged Robotic ,3.5,3.5,4.0,4.0
+2,True,Proj 69 - WHC_Public Wheelchair Management,2.0,3.5,8.0,0.0
+4,True,Proj 55 - Samsung_Shooshoe,3.0,3.0,0.0,3.0
+4,True,Proj S03 - Certis_Security  Robot,3.0,3.0,3.0,0.0
+5,True,Proj S15 - Flexi Systems_Recycling,2.0,3.0,5.5,0.0
+3,True,Proj S08-HOPE_Kommunal,3.0,3.2,6.5,0.0
+4,True,Proj S04-DSO_Counter-Terrorist Bot,3.0,3.0,3.0,3.0
+4,True,Proj E03 - BiFrost,3.0,3.0,6.0,0.0
+6,True,Proj S13 - Panasonic_P-Cube,2.0,2.0,0.0,3.0
+8,True,Proj 35 - NNI Chinese Predictive,1.0,1.0,3.1,0.0
+8,True,Proj 24 - Infineon_Chatbot Packing Assistant,1.1,2.0,0.0,2.0
+5,True,Proj 11 - BCA_Reengineering Road Construction,2.5,3.5,0.0,3.0
+6,True,Proj 59 - SERI_Predictive Data Analytics,2.0,2.0,2.0,0.0
+6,True,Proj 01 - Accenture_Digital Consultant,2.0,2.0,2.0,2.0
+6,True,Proj E01 - Myx Brewery,2.0,2.0,4.0,0.0
+6,True,Proj 07 - Bev Eat_F&B ordering & donated meal claims,2.0,2.0,4.0,2.0
+6,True,Proj 32 - MSF_Refurbishment of ROMM,2.0,2.0,6.0,0.0
+6,True,Proj S09 - Jublia_Sparse Datasets,2.0,2.0,6.0,2.0
+2,True,Proj 43-PA_Future of Service Delivery,4.0,5.0,0.0,0.0
+5,True,Proj 17 - DBS_Future of Banking Branch Design,2.0,3.0,5.5,3.0
+3,True,Proj 45 - PICO_Musical Engineering Installation,3.5,3.5,0.0,0.0
+2,True,Proj 50 - Queensway Sec Sch_Design for Reading,4.0,4.0,4.0,0.0
+2,True,Proj 10 - BCA_Net Zero Energy Buildings,4.0,5.0,0.0,5.0
+3,True, Proj 13 - CGH_Redesign Ward 14,3.0,3.5,3.5,4.0
+1,True,Proj 36 - NNI_Exoskeleton,5.0,5.0,0.0,5.0
+4,True,Proj S01 - Arup_Empowering spaces,3.0,3.0,6.0,3.0
+6,True,Proj 31 - MSF_Immersive Rehabilitative Learning,2.0,2.0,8.0,0.0
+-1,False,Proj 46 - PICO_Creative Data Visualisation,-1.0,-1.0,0.0,0.0
+6,True,Proj S18-V-key_Blockchain,2.0,2.0,8.0,2.0
+7,True,Proj 44 - Philips_Analytics for Signify Managed Data,2.0,2.0,0.0,0.0
+7,True,Proj 21 - FinC_MoneyGYM Mobile App,2.0,2.0,0.0,2.0
+4,True,Proj P47 - P&G_Combing,1.0,2.0,9.0,2.0
+5,True,Proj E02 - Valte,2.5,2.5,3.0,0.0
+5,True,Proj 15 - Citibank_Redesign Commercial Banking,2.0,3.0,7.5,0.0
+5,True,Proj E05 - IOT,2.5,2.5,3.0,2.5
+7,True,Proj S12 - Nvidia _AIRA,2.0,2.0,2.0,0.0
+7,True,Proj 65 - Tata Comms_Cloud based Security Services,2.0,2.0,2.0,2.0
+8,True,Proj 67 - UOB_Recognition of Information,1.0,1.0,3.1,1.0
+8,True,Proj S10-NDR_Biopsy Needle,1.1,1.1,2.0,0.0
+3,True,Proj 62 - ST Enrg Electronics_Coworking Space Management,0.5,0.5,9.5,0.0
+7,True,Proj 53 - Rolls Royce_Ergonomic and Compact Battery System,2.0,2.0,4.0,0.0
+8,True,Proj 40 - OCBC_Powering youth passions with FRANK,1.0,1.0,4.1,0.0
+5,True,Proj 37 - NPB_Non-destructive geometric measurement of tree parts,3.0,3.0,0.0,0.0
+7,True,Proj F03 - Alpha Ori_Ship Cargo Optimization,2.0,2.0,4.0,2.0
+8,True,Proj E04 - Fantasy,1.0,1.0,4.1,1.0
+8,True,Proj 57 - SBS Transit_Predictive Maintenance,0.9,1.2,2.0,1.1
+5,True,Proj S05 - Flotech_Tagging,2.0,3.0,7.5,3.0
+7,True,Proj 02 - Alpha Ori_AI Application for Maritime Industry,2.0,2.0,6.0,0.0
+8,True,Proj 66 - Tjombol_Payment of Salary,1.0,1.0,5.1,0.0
+7,True,Proj 61 - ST Enrg Electronics_Effective UX,2.0,2.0,6.0,2.0
+3,True,Proj 05 - Arup_Acoustic Furniture,3.5,3.5,0.0,3.5
+0,True,Proj S14 - Performance_SHADOW,5.0,8.0,5.0,0.0
+6,True,Proj 18 - DPA_Bridging the Dichotomy of PPVC,2.0,3.0,0.0,0.0
+7,True,Proj 41 - One Kind House_Window Farm,2.0,2.0,8.0,0.0
+7,True,Proj S06 - GRAB_Food Image ,2.0,2.0,8.0,2.0
+3,True,Proj 23 - GovTech_AI Trained Robotic Arm,3.0,4.0,3.5,0.0
+8,True,Proj 26 - Jurong Port _ Anomaly detection,2.0,2.0,0.0,0.0
+1,True,Proj 68 - WHC_Augmenting Wayfinding,5.0,5.0,5.0,0.0
