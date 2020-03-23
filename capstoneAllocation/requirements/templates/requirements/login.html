@@ -10,12 +10,10 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-        <h1>Student Login here :</h1>
-          <form method="post" action="{% url 'requirementIndex' %}">
-    <p>Login</p>
+  <h1>Student Login here :</h1>
   <div class="wrapper fadeInDown">
     <div id="formContent">
-      <form method="post" action="{% url 'spaceRequest' %}">
+      <form method="post" action="{% url 'requirementIndex' %}">
       {% csrf_token %}
       {# A more "HTML" way of creating the login form#}
         <br>

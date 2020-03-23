@@ -23,14 +23,15 @@
         <!-- Icon -->
     
         <!-- Login Form -->
-        <form novalidate method="post" action="{% url 'checkForm' teamID active %}">
+        <form novalidate formgroup="myform" method="post" action="{% url 'checkForm' teamID active %}">
           {% csrf_token %}
           <br>
           <p>Enter the details of your request below:</p>
-          <input required type="email" id="representativeEmail" class="fadeIn second" name="representativeEmail" placeholder="Representative Email" ><br>
+          <input required type="email" id="representativeEmail" class="fadeIn second" name="representativeEmail" value="{{ representativeEmail }}" ><br>
           <span class="error" aria-live="polite"></span><br>
-          <input required type="text" id="projectName" class="fadeIn third" name="projectName" placeholder="Project Name"><br>
+          <input required type="text" id="projectName" class="fadeIn third" name="projectName" value="{{ projectName }}"><br>
           <span class="error" aria-live="polite"></span><br>
+          
           <p>Type of Prototype:</p>
           <div>
             <input required type="radio" id="prototypeType1" onclick="document.getElementById('prototypeCustom').disabled = true;"
@@ -45,7 +46,8 @@
             <input required type="radio" id="prototypeType4" onclick="document.getElementById('prototypeCustom').disabled = true;"
             name="prototypeType" value = "Partial Prototype"><label>Partial Prototype</label><br>
             
-            <input required type="radio" onclick="document.getElementById('prototypeCustom').disabled = false;" name = "prototypeType" id="prototypeType5" value="Custom Type">Other Prototype Type<br><span class="error" aria-live="polite"></span>
+            <input required type="radio" onclick="document.getElementById('prototypeCustom').disabled = false;" name = "prototypeType" id="prototypeType5" value="Custom Type" >Other Prototype Type<br><span class="error" aria-live="polite"></span>
+           
             <input required id = "prototypeCustom" name = "prototypeCustom" type="text" placeholder="Enter Type of Prototype"/><br><span class="error" aria-live="polite"></span>
 
           </div><br>
@@ -92,25 +94,25 @@
           
           </div><br>
 
-          <input required type="number" class="fadeIn third" id = "powerpoints" name = "powerpoints" placeholder = "Number of Power Points needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "{{ powerpoints }}" name = "powerpoints" value = "{{ powerpoints }}"><br><span class="error" aria-live="polite"></span><br>
           
-          <input required type="number" class="fadeIn third" id = "bigPedestals" name = "bigPedestals" placeholder = "Number of Big Pedestals needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "bigPedestals" name = "bigPedestals" value = "{{ bigPedestals }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="number" class="fadeIn third" id = "smallPedestals" name = "smallPedestals" placeholder = "Number of Small Pedestals needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "smallPedestals" name = "smallPedestals" value = "{{ smallPedestals }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="text" class="fadeIn third" id = "pedestalDescription" name="pedestalDescription" placeholder="Why do you need the Pedestal(s)"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="text" class="fadeIn third" id = "pedestalDescription" name="pedestalDescription" value="{{ pedestalDescription }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="number" class="fadeIn third" id = "monitors" name = "monitors" placeholder = "Number of Monitors/Screens needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "monitors" name = "monitors" value = "{{ monitors }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="number" class="fadeIn third" id = "TVs" name = "TVs" placeholder = "Number of TVs needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "TVs" name = "TVs" value = "{{ TVs }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="number" class="fadeIn third" id = "tables" name = "tables" placeholder = "Number of Tables needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "tables" name = "tables" value = "{{ tables }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="number" class="fadeIn third" id = "chairs" name = "chairs" placeholder = "Number of Chairs needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "chairs" name = "chairs" value = "{{ chairs }}"><br><span class="error" aria-live="polite"></span><br>
  
-          <input required type="number" class="fadeIn third" id = "HDMIAdaptors" name = "HDMIAdaptors" placeholder = "Number of HDMI Adaptors needed"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="number" class="fadeIn third" id = "HDMIAdaptors" name = "HDMIAdaptors" value = "{{ HDMIAdaptors }}"><br><span class="error" aria-live="polite"></span><br>
 
-          <input required type="text" id="others" class="fadeIn third" name="others" placeholder="Other Requirements"><br><span class="error" aria-live="polite"></span><br>
+          <input required type="text" id="others" class="fadeIn third" name="others" value ="{{ others }}"><br><span class="error" aria-live="polite"></span><br>
 
 
           <input required type="submit" class="fadeIn fourth" value="Submit Space Request">

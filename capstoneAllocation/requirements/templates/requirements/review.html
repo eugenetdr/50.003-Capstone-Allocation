@@ -10,12 +10,11 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-    <button onclick="location.href='{% url 'spaceRequest' teamID active %}'" type="button">Edit</button>
     <button onclick="location.href='{% url 'studentLogout' teamID %}'" type="button">Logout</button>
     <p>Review</p>
     <div class="wrapper fadeInDown">
       <div id="formContent">
-        <form novalidate method="post" action="{% url 'spaceRequest' %}"> 
+        <form novalidate method="post" action="{% url 'spaceRequest' teamID active %}"> 
         {% csrf_token %}
         {# A more "HTML" way of creating the login form#}
           <br>
@@ -24,7 +23,7 @@
           <input type="text" class="fadeIn third" value = "Representative Email: {{ representativeEmail }}" readonly>
           <input type="text" class="fadeIn third" value = "Prototype Dimensions(L x W x H): {{ prototypeLength }} x {{ prototypeWidth }} x {{prototypeHeight}}" readonly>
           <input type="text" class="fadeIn third" value = "Showcase Dimensions(L x W x H): {{ showcaseLength }} x {{ showcaseWidth }} x {{ showcaseHeight }}" readonly>
-          <input type="text" class="fadeIn third" value = "Number of Powerpoints: {{ powerpoints }}" readonly>
+          <input type="text" class="fadeIn third" value = "Number of Power Points: {{ powerpoints }}" readonly>
           <input type="text" class="fadeIn third" value = "Number of Big Pedestals: {{ bigPedestals }}" readonly>
           <input type="text" class="fadeIn third" value = "Number of Small Pedestal: {{ smallPedestals }}" readonly>
           <input type="text" class="fadeIn third" value = "Why you require the pedestals: {{ pedestalDescription }}" readonly>
@@ -34,12 +33,10 @@
           <input type="text" class="fadeIn third" value = "Number of Chairs: {{ chairs }}" readonly>
           <input type="text" class="fadeIn third" value = "Number of HDMI Adaptors: {{ HDMIAdaptors }}" readonly>
           <input type="text" class="fadeIn third" value = "Other Requirements: {{ others }}" readonly>
-          <input type="text" class="fadeIn third" value = "Remarks: {{ remarks }}" readonly>
           <input required type="submit" class="fadeIn fourth" value="Edit Request">
           <br>
         </form>
       </div>
     </div>
-    <button onclick="location.href='/requirements/'" type="button">login</button>
   </body>
 </html>

@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Admin
+from requirements.models import Team, Request
 
 # Create your views here.
 
@@ -67,6 +68,8 @@ def viewRequirements(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	context = {'adminID':user, 'active':active}
 	if (active==admin.status) & (active==1):
+		r=Request.objects.all()
+		context['request'] = r
 		return render(request, 'admin/view.html', context)
 	else:
 		return redirect('adminIndex')

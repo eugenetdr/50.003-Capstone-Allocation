@@ -12,11 +12,11 @@
   <body>
     <div class="wrapper fadeInDown">
     <div id="formContent">
-      <form novalidate method="post" action="{% url 'review' %}"> 
+      <form novalidate method="post" action="{% url 'review' teamID active %}"> 
       {% csrf_token %}
       {# A more "HTML" way of creating the login form#}
         <br>
-        <p >Team N, your space request has been sent.</p>
+        <p >Team {{teamID}}, your space request has been sent.</p>
         <input required type="submit" class="fadeIn fourth" value="Review Space Request">
       </form>
     </div>
