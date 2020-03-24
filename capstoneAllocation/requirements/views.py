@@ -2,36 +2,23 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.datastructures import MultiValueDictKeyError
 from .models import Team, Request
+from datetime import datetime
+from pytz import timezone
 
 prototype_size_dictionary = {"Small": [1,1,1], "Medium": [1.5,1.5,1.5], "Large": [2,2,2]}
 showcase_size_dictionary = {"Small": [1.2,1.2,1.2], "Medium": [1.7,1.7,1.7], "Large":[2.2,2.2,2.2]}
 
-def validate(username, password):
-	status = 0
-	try:
-		Team.objects.filter(teamID=username).get()
-		team = Team.objects.get(teamID=username)
-		if (password == team.teamPW) & (team.status==1):
-			status=2
-		elif (password == team.teamPW) & (team.status==0):
-			status = 1
-			team = Team.objects.get(teamID=username)
-			team.status = 1
-			team.save()
-	except:
-		status=0
-	return status
-
-
-
 def index(request):
-	user = False
+	user = None
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
-		user = validate(username, password)
-		if user==1:
+		try:
 			team = Team.objects.get(teamID=username)
+			user=team.validate(password)
+		except:
+			return HttpResponse("Unknown User")
+		if user==1:
 			context = {'active': team.status, 'teamID': username, 'requestMade': team.requestMade}
 			if team.requestMade:
 				return redirect('review', team_id=username, active=team.status)
@@ -40,16 +27,16 @@ def index(request):
 		elif user==0:
 			return HttpResponse("Invalid login details given")
 		else:
-			return HttpResponse("Multiple Logins Detected!")
+			team.logout()
+			return HttpResponse("Multiple Logins Detected! Logging Out All Instances!")
 	else:
-		#return render(request, 'requirements/login.html', {"contextDict": default_context})
 		return render(request, 'requirements/login.html')
 
 
 def spaceRequest(request, team_id, active):
 	team = Team.objects.get(teamID=team_id)
 	r = Request.objects.get(teamID=team_id)
-	if (active==team.status) & (active==1):
+	if (team.isLoggedIn()) & (active==1):
 			
 		if team.requestMade:
 			context = {
@@ -88,7 +75,7 @@ def checkForm(request, team_id, active):
 	team = Team.objects.get(teamID=team_id)
 	r = Request.objects.get(teamID=team_id)
 	context = {'teamID':team.teamID, 'active':team.status}
-	if (active==team.status) & (active==1):
+	if (team.isLoggedIn()) & (active==1):
 		if request.method == 'POST':
 			keys = list((request.POST).keys())
 			API_dict = {}
@@ -124,33 +111,11 @@ def checkForm(request, team_id, active):
 				API_dict[column] = request.POST[column]
 			for column in numerical_inputs:
 				API_dict[column] = float(request.POST[column])
-			#Right now just reloads an empty form. 
+			#example API_dict {'prototypeType': '1:1', 'prototypeLength': 1.5, 'prototypeWidth': 1.5, 'prototypeHeight': 1.5, 'showcaseLength': 1.5, 'showcaseWidth': 1.5, 'showcaseHeight': 1.5, 'representativeEmail': 'capstone1@capstone.com', 'projectName': 'capstone2020001', 'pedestalDescription': 'test', 'others': 'test', 'powerpoints': 0.0, 'bigPedestals': 0.0, 'smallPedestals': 1.0, 'monitors': 0.0, 'TVs': 0.0, 'tables': 1.0, 'chairs': 2.0, 'HDMIAdaptors': 1.0}
 			#TODO: Pass API_dict to backend API to store in database
-			r=Request(
-				r.pk,
-				teamID=team_id, 
-				pType=API_dict['prototypeType'],
-				pLength=API_dict['prototypeLength'],
-				pWidth=API_dict['prototypeWidth'],
-				pHeight=API_dict['prototypeHeight'],
-				sLength=API_dict['showcaseLength'],
-				sWidth=API_dict['showcaseWidth'],
-				sHeight=API_dict['showcaseHeight'],
-				repEmail=API_dict['representativeEmail'],
-				projectName=API_dict['projectName'],
-				pedDesc=API_dict['pedestalDescription'],
-				other=API_dict['others'],
-				numPP=API_dict['powerpoints'],
-				numBigPed=API_dict['bigPedestals'],
-				numSmallPed=API_dict['smallPedestals'],
-				numMonitor=API_dict['monitors'],
-				numTV=API_dict['TVs'],
-				numTable=API_dict['tables'],
-				numChair=API_dict['chairs'],
-				numHDMI=API_dict['HDMIAdaptors'])
-			r.save()
-			team.requestMade = 1
-			team.save()
+			API_dict['reqDateTime']=datetime.now()
+			r.inputDetails(API_dict)
+			team.madeRequest()
 			return render(request, 'requirements/confirmation.html', context)
 		else:
 			return redirect('review')
@@ -161,9 +126,7 @@ def checkForm(request, team_id, active):
 def confirmation(request, team_id, active):
 	team = Team.objects.get(teamID=team_id)
 	context = {'teamID':team.teamID, 'active':team.status}
-	if (active==team.status) & (active==1):
-		team.requestMade = 1
-		team.save()
+	if (team.isLoggedIn()) & (active==1):
 		return render(request, 'requirements/confirmation.html',context)
 	else:
 		return redirect('requirementIndex')
@@ -195,7 +158,7 @@ def review(request, team_id, active):
 		'HDMIAdaptors':r.numHDMI,
 		'others':r.other,
 		}
-	if (active==team.status) & (active==1):
+	if (team.isLoggedIn()) & (active==1):
 		return render(request, 'requirements/review.html',context)
 	else:
 		return redirect('requirementIndex')
@@ -203,6 +166,5 @@ def review(request, team_id, active):
 
 def logout(request, team_id):
 	team = Team.objects.get(teamID=team_id)
-	team.status=0
-	team.save()
+	team.logout()
 	return redirect('requirementIndex')

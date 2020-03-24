@@ -23,22 +23,28 @@ def validate(username, password):
 	return status
 
 def index(request):
-	user = False
+	user = None
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
-		user = validate(username, password)
-		if user==1:
+		try:
 			admin = Admin.objects.get(adminID=username)
-			admin.status=1
-			admin.save()
+			print(admin.adminPW)
+			user=admin.validate(password)
+			print(user)
+		except:
+			return HttpResponse("Unknown User")
+		if user==1:
 			return redirect('floorplan', active=admin.status, user=username)
 		elif user==0:
 			return HttpResponse("Invalid login details given")
 		else:
-			return HttpResponse("Multiple Logins Detected!")
+			admin.logout()
+			return HttpResponse("Multiple Logins Detected! Logging Out All Instances!")
 	else:
 		return render(request, 'admin/login.html')
+
+
 
 def floorplan(request, active, user):
 	admin = Admin.objects.get(adminID=user)
