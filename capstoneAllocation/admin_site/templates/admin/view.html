@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8">
@@ -23,8 +24,8 @@
   </style>
   </head>
   <body>
-  	<p>View Requirements</p>
-  	<button onclick="location.href='{% url 'floorplan' adminID active %}'" type="button">Home</button>
+  	<h1>View Requirements</h1>
+  	<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
 
 	<table>
 		<tr>
@@ -44,6 +45,7 @@
 			<th>Chairs</th>
 			<th>HDMI Adaptors</th>
 			<th>Others</th>
+			<th>Approval</th>
 		</tr>
 		{% for r in request %}
 		<tr>
@@ -63,6 +65,10 @@
 			<td>{{ r.numChair }}</td>
 			<td>{{ r.numHDMI }}</td>
 			<td>{{ r.other }}</td>
+			<td>
+				<button type="button">Approve</button>
+				<button type="button">Reject</button>
+			</td>
 		</tr>
 		{% endfor %}
 	</table>

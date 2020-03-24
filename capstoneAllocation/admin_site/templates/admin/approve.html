@@ -1,12 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8">
     <title>Confirmation</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-  	<p>Approval Page</p>
-    <button onclick="location.href='{% url 'floorplan' adminID active %}'" type="button">Home</button>
-    <button onclick="location.href='{% url 'logout' adminID%}'" type="button">Logout</button>
+  	<h1>Approval Page</h1>
+  	<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
+    <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
   </body>
 </html>

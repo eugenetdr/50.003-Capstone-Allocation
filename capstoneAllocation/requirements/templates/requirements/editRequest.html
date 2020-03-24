@@ -13,11 +13,11 @@
   </head>
 
   <body>
-    <p>{{ teamID }} Request</p>
-    <button onclick="location.href='{% url 'studentLogout' teamID %}'" type="button">Logout</button>
+    <input class="fadeIn fourth" type="button" value="Logout" onclick="location.href='{% url 'studentLogout' teamID %}'" >
     <!-- <p>Request Page</p>     -->
     <div class="wrapper fadeInDown">
       <div id="formContent">
+        <h1>{{ teamID }} Request</h1>
         <!-- Tabs Titles -->
     
         <!-- Icon -->

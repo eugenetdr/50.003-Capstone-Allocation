@@ -10,13 +10,13 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-    <button onclick="location.href='{% url 'studentLogout' teamID %}'" type="button">Logout</button>
-    <p>Review</p>
+    <input class="fadeIn fourth" type="button" value="Logout" onclick="location.href='{% url 'studentLogout' teamID %}'" >
     <div class="wrapper fadeInDown">
       <div id="formContent">
         <form novalidate method="post" action="{% url 'spaceRequest' teamID active %}"> 
         {% csrf_token %}
         {# A more "HTML" way of creating the login form#}
+          <h1>Review</h1>
           <br>
           <input type="text" class="fadeIn third" value = "Project Name: {{ projectName }}" readonly>
           <input type="text" class="fadeIn third" value = "Type of Prototype: {{ prototypeType }}" readonly>

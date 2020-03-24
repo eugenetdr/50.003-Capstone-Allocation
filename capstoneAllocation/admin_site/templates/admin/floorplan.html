@@ -1,14 +1,19 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8">
     <title>Floorplan</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-  	<p>Home</p>
-    <button onclick="location.href='{% url 'requirements' adminID active %}'" type="button">View Requirements</button>
-    <button onclick="location.href='{% url 'edit' adminID active %}'" type="button">Edit</button>
-    <button onclick="location.href='{% url 'approve' adminID active %}'" type="button">Approve</button>
-    <button onclick="location.href='{% url 'logout' adminID %}'" type="button">Logout</button>
+  	<h1>Home</h1>
+    <input onclick="location.href='{% url 'requirements' adminID active %}'" type="button" value="View Requirements">
+    <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit">
+    <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
+    <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
   </body>
 </html>

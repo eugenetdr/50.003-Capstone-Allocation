@@ -10,7 +10,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/edit_background.css' %}">
   </head>
   <body>
-  <p>Edit</p>
+  <h1>Edit</h1>
+    <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
 
   <div id="demo" class = "editbackground">
       <div id="drag-1" class="draggable">
@@ -73,6 +74,5 @@
     }
 
     </script>
-    <button onclick="location.href='{% url 'floorplan' adminID active %}'" type="button">Home</button>
   </body>
 </html>

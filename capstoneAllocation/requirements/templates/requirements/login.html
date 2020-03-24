@@ -10,18 +10,18 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-  <h1>Student Login here :</h1>
   <div class="wrapper fadeInDown">
     <div id="formContent">
+      <h1>Student Login here :</h1>
       <form method="post" action="{% url 'requirementIndex' %}">
       {% csrf_token %}
       {# A more "HTML" way of creating the login form#}
         <br>
         <input class="fadeIn second" type="text" name="username" placeholder="Username"><br><br>
         <input class="fadeIn third" type="password" name="password" placeholder="Password"><br><br>
-        <input class="fadeIn fourth" type="submit" name="" value="Login">
+        <input class="fadeIn fourth" type="submit" name="" value="Login" >
+        <input class="fadeIn fourth" type="button" name="" value="Back" onclick="location.href='/'">
       </form>
     </div>
-  </div>
   </body>
 </html>
