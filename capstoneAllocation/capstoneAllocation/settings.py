@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'requirements.apps.RequirementsConfig',
     'mode.apps.ModeConfig',
     'admin_site.apps.AdminSiteConfig',
+    'import_export',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -122,6 +123,6 @@ USE_TZ = True
 
 STATIC_URL = '/50.003-Capstone-Allocation/capstoneAllocation/admin_site/static/'
 
-
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 

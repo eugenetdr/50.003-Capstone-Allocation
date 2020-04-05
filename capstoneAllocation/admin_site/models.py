@@ -103,7 +103,7 @@ class UploadedFiles(models.Model):
 		for ind, entry in df.iterrows():
 			if not math.isnan(entry['Exhibit']):
 				teamIDls.append(entry['Exhibit'])
-				yearOfGradls.append(9999)
+				yearOfGradls.append(year)
 				projectNamels.append(entry['Unnamed: 1'])
 				pTypels.append(entry['Unnamed: 3'])
 				repEmaills.append('')

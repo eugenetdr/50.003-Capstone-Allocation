@@ -1,5 +1,7 @@
 from django.db import models
+from django.db import connection, transaction
 import datetime
+from admin_site.models import ReqData
 # from django.contrib.auth.models import User
 
 class Team(models.Model):
@@ -91,26 +93,27 @@ class Request(models.Model):
 		self.reqDateTime = detailsDict['reqDateTime']
 		self.save()
 
-
-# class UserProfileInfo(models.Model):
-#     user = models.OneToOneField(User,on_delete=models.CASCADE)
-	
-#     def __str__(self):
-#         return self.user.username
-
-# class Question(models.Model):
-#     question_text = models.CharField(max_length=200)
-#     pub_date = models.DateTimeField('date published')
-	
-#     def __str__(self):
-#         return self.question_text
-
-#     def was_published_recently(self):
-#         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
-
-# class Choice(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     choice_text = models.CharField(max_length=200)
-#     votes = models.IntegerField(default=0)
-#     def __str__(self):
-#         return self.choice_text
+	def injectToDB(self):
+		inject = ReqData(
+							teamID = self.teamID,
+							projectName = self.projectName,
+							pType = self.pType,
+							repEmail = self.repEmail,
+							pLength = self.pLength,
+							pWidth = self.pWidth,
+							pHeight = self.pHeight,
+							sLength = self.sLength,
+							sWidth = self.sWidth,
+							sHeight = self.sHeight,
+							numPP = self.numPP,
+							numBigPed = self.numBigPed,
+							numSmallPed = self.numSmallPed,
+							pedDesc = self.pedDesc,
+							numMonitor = self.numMonitor,
+							numTV = self.numTV,
+							numTable = self.numTable,
+							numChair = self.numChair,
+							numHDMI = self.numHDMI,
+							other = self.other,
+							reqDateTime = self.reqDateTime,)
+		inject.save()

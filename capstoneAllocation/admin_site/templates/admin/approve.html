@@ -3,15 +3,80 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Confirmation</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>View Requirements</title>
+
+  <style>
+  table {
+    border-collapse: collapse;
+  }
+
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    word-wrap: break-word;
+      max-width: 200px;
+  }
+
+  tr {
+  }
+
+  </style>
   </head>
   <body>
   	<h1>Approval Page</h1>
   	<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
     <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
+    <input onclick="location.href='{% url 'confirm' adminID active %}'" type="button" value="Approve All">
+    
+
+  <table>
+    <tr>
+      <th>Team ID</th>
+      <th>Project Name</th>
+      <th>Project Type</th>
+      <th>Representative Email</th>
+      <th>Request Date</th>
+      <th>Prototype Dimensions (LxWxH)</th>
+      <th>Showcase Dimensions (LxWxH)</th>
+      <th>Power Points</th>
+      <th>Big Pedestals</th>
+      <th>Small Pedestals</th>
+      <th>Pedestal Description</th>
+      <th>Monitor</th>
+      <th>TVs</th>
+      <th>Tables</th>
+      <th>Chairs</th>
+      <th>HDMI Adaptors</th>
+      <th>Others</th>
+      <th>Approval</th>
+    </tr>
+    {% for r in request %}
+    <tr>
+      <td>{{ r.teamID }}</td>
+      <td>{{ r.projectName }}</td>
+      <td>{{ r.pType }}</td>
+      <td>{{ r.repEmail }}</td>
+      <td>{{ r.reqDateTime }}</td>
+      <td>{{ r.pLength }}x{{ r.pWidth }}x{{ r.pHeight }}</td>
+      <td>{{ r.sLength }}x{{ r.sWidth }}x{{ r.sHeight }}</td>
+      <td>{{ r.numPP }}</td>
+      <td>{{ r.numBigPed }}</td>
+      <td>{{ r.numSmallPed }}</td>
+      <td>{{ r.pedDesc }}</td>
+      <td>{{ r.numMonitor }}</td>
+      <td>{{ r.numTV }}</td>
+      <td>{{ r.numTable }}</td>
+      <td>{{ r.numChair }}</td>
+      <td>{{ r.numHDMI }}</td>
+      <td>{{ r.other }}</td>
+      <td>
+        <button type="button">Approve</button>
+        <button type="button">Reject</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
   </body>
 </html>
+

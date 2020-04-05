@@ -9,8 +9,10 @@ urlpatterns = [
     path('<str:user>/<int:active>/floorplan/', views.floorplan, name='floorplan'),
     # ex: /admin/logout
     path('<str:user>/logout/', views.logout, name='logout'),
-    # ex: /admin/1/floorplan/aprrove
+    # ex: /admin/1/floorplan/confirmation
     path('<str:user>/<int:active>/floorplan/confirmation/', views.approveConfirmation, name='approve'),
+    # ex: /admin/1/floorplan/confirmation/aprrove
+    path('<str:user>/<int:active>/floorplan/confirmation/approve', views.approve, name='confirm'),
     # ex: /admin/1/floorplan/edit
     path('<str:user>/<int:active>/floorplan/edit/', views.editAllocation, name='edit'),
     # ex: /admin/1/floorplan/requirements
