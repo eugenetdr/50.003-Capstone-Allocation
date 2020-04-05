@@ -148,6 +148,51 @@ class UploadedFiles(models.Model):
 
 		return output, dim
 
+	def inputDB(self, df):
+		df=pd.DataFrame(df)
+		for line in df.itertuples():
+			checkData={
+						'numPP':line.numPP,
+						'numBigPed':line.numBigPed,
+						'numSmallPed':line.numSmallPed,
+						'numMonitor':line.numMonitor,
+						'numTV':line.numTV,
+						'numTable':line.numTable,
+						'numChair':line.numChair,
+						'numHDMI':line.numHDMI
+						}
+			for i in checkData:
+				try:
+					float(checkData[i])
+				except:
+					checkData[i] = 0.0
+			r=ReqData(
+				teamID=line.teamID,
+				yearOfGrad=line.yearOfGrad,
+				projectName = line.projectName,
+				pType = line.pType,
+				repEmail = line.repEmail,
+				pLength = line.pLength,
+				pWidth = line.pWidth,
+				pHeight = line.pHeight,
+				sLength = line.sLength,
+				sWidth = line.sWidth,
+				sHeight = line.sHeight,
+				numPP = checkData['numPP'],
+				numBigPed = checkData['numBigPed'],
+				numSmallPed = checkData['numSmallPed'],
+				pedDesc = line.pedDesc,
+				numMonitor = checkData['numMonitor'],
+				numTV = checkData['numTV'],
+				numTable = checkData['numTable'],
+				numChair = checkData['numChair'],
+				numHDMI = checkData['numHDMI'],
+				other = line.other
+				)
+			r.save()
+
+
+
 
 class ReqData(models.Model):
 	teamID = models.CharField(max_length=100)
@@ -176,26 +221,28 @@ class ReqData(models.Model):
 	def __str__(self):
 		return self.teamID
 
-	def inputDB(self, detailsDict):
-		self.teamID = detailsDict['teamID']
-		self.yearOfGrad = detailsDict['yearOfGrad']
-		self.projectName = detailsDict['projectName']
-		self.pType = detailsDict['pType']
-		self.repEmail = detailsDict['repEmail']
-		self.pLength = detailsDict['pLength']
-		self.pWidth = detailsDict['pWidth']
-		self.pHeight = detailsDict['pHeight']
-		self.sLength = detailsDict['sLength']
-		self.sWidth = detailsDict['sWidth']
-		self.sHeight = detailsDict['sHeight']
-		self.numPP = detailsDict['numPP']
-		self.numBigPed = detailsDict['numBigPed']
-		self.numSmallPed = detailsDict['numSmallPed']
-		self.pedDesc = detailsDict['pedDesc']
-		self.numMonitor = detailsDict['numMonitor']
-		self.numTV = detailsDict['numTV']
-		self.numTable = detailsDict['numTable']
-		self.numChair = detailsDict['numChair']
-		self.numHDMI = detailsDict['numHDMI']
-		self.other = detailsDict['other']
-		self.save()
+	# def inputDB(self, detailsDict):
+
+
+	# 	self.teamID = detailsDict['teamID']
+	# 	self.yearOfGrad = detailsDict['yearOfGrad']
+	# 	self.projectName = detailsDict['projectName']
+	# 	self.pType = detailsDict['pType']
+	# 	self.repEmail = detailsDict['repEmail']
+	# 	self.pLength = detailsDict['pLength']
+	# 	self.pWidth = detailsDict['pWidth']
+	# 	self.pHeight = detailsDict['pHeight']
+	# 	self.sLength = detailsDict['sLength']
+	# 	self.sWidth = detailsDict['sWidth']
+	# 	self.sHeight = detailsDict['sHeight']
+	# 	self.numPP = detailsDict['numPP']
+	# 	self.numBigPed = detailsDict['numBigPed']
+	# 	self.numSmallPed = detailsDict['numSmallPed']
+	# 	self.pedDesc = detailsDict['pedDesc']
+	# 	self.numMonitor = detailsDict['numMonitor']
+	# 	self.numTV = detailsDict['numTV']
+	# 	self.numTable = detailsDict['numTable']
+	# 	self.numChair = detailsDict['numChair']
+	# 	self.numHDMI = detailsDict['numHDMI']
+	# 	self.other = detailsDict['other']
+	# 	self.save()

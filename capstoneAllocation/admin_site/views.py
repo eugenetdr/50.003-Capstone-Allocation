@@ -5,29 +5,9 @@ from .models import Admin, UploadedFiles
 from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
-import sqlite3
-from sqlalchemy import create_engine
 import pandas as pd
 
-db = create_engine('sqlite://')
 
-# Create your views here.
-
-# def validate(username, password):
-# 	status = 0
-# 	try:
-# 		Admin.objects.filter(adminID=username).get()
-# 		admin = Admin.objects.get(adminID=username)
-# 		if (password == admin.adminPW) & (admin.status==1):
-# 			status = 2
-# 		elif (password == admin.adminPW) & (admin.status==0):
-# 			status = 1
-# 			admin = Admin.objects.get(adminID=username)
-# 			admin.status = 1
-# 			admin.save()
-# 	except:
-# 		status=0
-# 	return status
 
 def index(request):
 	user = None
@@ -66,7 +46,7 @@ def floorplan(request, active, user):
 				df=f.manageFile()
 				output, dim = f.convertDfToDB(df, request.POST["year"])
 				df=f.updateDimToData(output, dim)
-				print(pd.read_sql_table(table_name='admin_site_reqdata', con=db))
+				f.inputDB(df)
 				return HttpResponse("File Uploaded")
 			except MultiValueDictKeyError:
 				return render(request, 'admin/floorplan.html', context)
