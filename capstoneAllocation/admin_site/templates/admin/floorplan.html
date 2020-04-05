@@ -15,5 +15,11 @@
     <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit">
     <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
     <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="myfile">
+      <input type="text" name="year" placeholder="Year of Grad">
+      <button type="submit">Upload</button>
+  </form>
   </body>
 </html>
