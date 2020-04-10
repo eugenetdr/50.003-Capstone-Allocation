@@ -11,6 +11,8 @@ const form  = document.getElementsByTagName('form')[0];
 
 //Enter all the inputs you want to check for:
 
+const submit = document.querySelectorAll("input[value='Submit Space Request']");
+
 const email = document.getElementById('representativeEmail');
 const projectName = document.getElementById('projectName');
 
@@ -129,10 +131,12 @@ function stringListener(string, ErrorObject){
           // is valid, we remove the error message.
           ErrorObject.innerHTML = ''; // Reset the content of the message
           ErrorObject.className = 'error'; // Reset the visual state of the message
+          submit.disabled = false;
         }
         else {
           // If there is still an error, show the correct error
           showStringError(string, ErrorObject);
+          submit.disabled = true;
         }
       });
 }
@@ -150,9 +154,11 @@ function numberListener(numerical, ErrorObject){
           // is valid, we remove the error message.
           ErrorObject.innerHTML = ''; // Reset the content of the message
           ErrorObject.className = 'error'; // Reset the visual state of the message
+          submit.disabled = false;
         }
         else {
           // If there is still an error, show the correct error
+          submit.disabled = true;
           showNumberError(numerical, ErrorObject);
         }
       });
@@ -170,10 +176,12 @@ function emailListener(email, ErrorObject){
         // is valid, we remove the error message.
         ErrorObject.innerHTML = ''; // Reset the content of the message
         ErrorObject.className = 'error'; // Reset the visual state of the message
+        submit.disabled = false;
     }
     else {
         // If there is still an error, show the correct error
         showEmailError(email, ErrorObject);
+        submit.disabled = true;
     }
     });
 }

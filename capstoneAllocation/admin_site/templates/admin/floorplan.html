@@ -2,18 +2,27 @@
 {% load static %}
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta http-equiv="content-type" charset="utf-8">
     <title>Floorplan</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/floorplan1.css' %}">
   </head>
   <body>
-  	<h1>Home</h1>
+  	<h1>Floorplan Level 1</h1>
     <input onclick="location.href='{% url 'requirements' adminID active %}'" type="button" value="View Requirements">
-    <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit">
+    <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit Floorplan Level 1">
+    <input onclick="location.href='{% url 'edit2' adminID active %}'" type="button" value="Edit Floorplan Level 2">
+    <input onclick="location.href='{% url 'floorplan2' adminID active %}'" type="button" value="View Floorplan Level 2">
     <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
     <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
+    <div class="page main" id = "pageMain">      
+    </div>
+    <script>
+      document.getElementById("pageMain").style.backgroundImage = "{% static 'images/lvl1floorplan.png' %}";
+      document.getElementById("pageMain").style.backgroundImage = "{% static 'images/Dashboard.png' %}?{% now 'U' %}";
+      </script>
   </body>
 </html>

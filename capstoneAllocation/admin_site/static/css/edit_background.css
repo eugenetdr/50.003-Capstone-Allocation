@@ -1,4 +1,12 @@
-.editbackground {
-  background-image: url('../images/lvl1floorplan.png');
-  background-size: 100% 100%
+* {
+  margin: 0;
+  padding: 0;
+}
+.center-fit {
+  max-height: 100vh;
+  max-width: 100%;
+}
+.imgbox{
+  display: grid;
+  height: 100%;
 }

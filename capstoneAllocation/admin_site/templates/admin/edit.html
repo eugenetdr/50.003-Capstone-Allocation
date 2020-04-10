@@ -1,78 +1,34 @@
 <!DOCTYPE html>
 {% load static %}
 <html>
-  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-  
   <head>
     <meta charset="utf-8">
     <title>Edit</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/item.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/edit_background.css' %}">
+    <script src="{% static 'node_modules/file-saver/dist/FileSaver.min.js' %}"></script>
+    <script src="{% static 'node_modules/html2canvas/dist/html2canvas.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="//daybrush.com/scenejs/release/latest/dist/scene.js"></script>
+    <script src="//daybrush.com/moveable/release/latest/dist/moveable.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.8/styles/default.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/lvl1_edit.css' %}">
+    <link rel="icon" href="data:;base64,=">
+    
+
   </head>
   <body>
+    
   <h1>Edit</h1>
+    <input type="button" value="Save" id="btnSave">
     <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
+    <input onclick="location.href='{% url 'edit2' adminID active %}'" type="button" value="Edit Second Floor">
+    <div class="label"></div>>
+    <div class="page main" id = "pageMain">
+      <div class="container">
+        <!--<img src="{% static 'images/lvl1floorplan.png' %}" class="center-fit">-->
+    </div>
+  </div> 
 
-  <div id="demo" class = "editbackground">
-      <div id="drag-1" class="draggable">
-          <p> You can drag one element </p>
-      </div>
-      <div id="drag-2" class="draggable">
-          <p> with each pointer </p>
-      </div>
-  </div>
-
-
-
-    <script>
-    // target elements with the "draggable" class
-    interact('.draggable')
-        .draggable({
-            // enable inertial throwing
-            inertia: true,
-            // keep the element within the area of it's parent
-            restrict: {
-                restriction: "parent",
-                endOnly: true,
-                elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-            },
-            // enable autoScroll
-            autoScroll: true,
-
-            onstart: function (event) {
-                console.log('onstart');
-
-            },
-
-            // call this function on every dragmove event
-            onmove: dragMoveListener,
-            // call this function on every dragend event
-            onend: function (event) {
-                console.log('onend');
-                var textEl = event.target.querySelector('p');
-
-                textEl && (textEl.textContent =
-                    'You have moved this booth!');
-            }
-        });
-
-    function dragMoveListener (event) {
-        console.log('dragMoveListener');
-        var target = event.target,
-            // keep the dragged position in the data-x/data-y attributes
-            x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
-            y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-        // translate the element
-        target.style.webkitTransform =
-            target.style.transform =
-                'translate(' + x + 'px, ' + y + 'px)';
-
-        // update the position attributes
-        target.setAttribute('data-x', x);
-        target.setAttribute('data-y', y);
-    }
-
-    </script>
-  </body>
+<script src="{% static 'js/resize.js' %}" one='{{ allocation | safe }}'></script>
+</body>
 </html>
