@@ -87,7 +87,7 @@ def editAllocation(request, active, user):
 
 def viewRequirements(request, active, user):
 	admin = Admin.objects.get(adminID=user)
-	years = ReqData.objects.values('yearOfGrad').distinct()
+	years = ReqData.objects.values('yearOfGrad').distinct().order_by('-yearOfGrad')
 	context = {'adminID':user, 'active':active, 'years':years}
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
