@@ -2,6 +2,7 @@ from django.db import models
 from datetime import datetime as dt
 import pandas as pd
 import math
+import json
 
 # Create your models here.
 
@@ -43,6 +44,9 @@ class UploadedFiles(models.Model):
 	yearOfGrad = models.IntegerField(default=dt.now().year)
 	fileName=models.CharField(max_length=100)
 	uploadedFile=models.FileField(upload_to='documents/')
+
+	def __str__(self):
+		return self.yearOfGrad
 
 	def manageFile(self):
 		if '.csv' in self.fileName:
@@ -103,7 +107,7 @@ class UploadedFiles(models.Model):
 		for ind, entry in df.iterrows():
 			if not math.isnan(entry['Exhibit']):
 				teamIDls.append(entry['Exhibit'])
-				yearOfGradls.append(9999)
+				yearOfGradls.append(year)
 				projectNamels.append(entry['Unnamed: 1'])
 				pTypels.append(entry['Unnamed: 3'])
 				repEmaills.append('')
@@ -221,28 +225,50 @@ class ReqData(models.Model):
 	def __str__(self):
 		return self.teamID
 
-	# def inputDB(self, detailsDict):
+class Allocation(models.Model):
+	allocateDT = models.DateTimeField(default=dt.now())
+	allocation = models.BinaryField()
 
+	def __str__(self):
+		return self.allocateDT
 
-	# 	self.teamID = detailsDict['teamID']
-	# 	self.yearOfGrad = detailsDict['yearOfGrad']
-	# 	self.projectName = detailsDict['projectName']
-	# 	self.pType = detailsDict['pType']
-	# 	self.repEmail = detailsDict['repEmail']
-	# 	self.pLength = detailsDict['pLength']
-	# 	self.pWidth = detailsDict['pWidth']
-	# 	self.pHeight = detailsDict['pHeight']
-	# 	self.sLength = detailsDict['sLength']
-	# 	self.sWidth = detailsDict['sWidth']
-	# 	self.sHeight = detailsDict['sHeight']
-	# 	self.numPP = detailsDict['numPP']
-	# 	self.numBigPed = detailsDict['numBigPed']
-	# 	self.numSmallPed = detailsDict['numSmallPed']
-	# 	self.pedDesc = detailsDict['pedDesc']
-	# 	self.numMonitor = detailsDict['numMonitor']
-	# 	self.numTV = detailsDict['numTV']
-	# 	self.numTable = detailsDict['numTable']
-	# 	self.numChair = detailsDict['numChair']
-	# 	self.numHDMI = detailsDict['numHDMI']
-	# 	self.other = detailsDict['other']
-	# 	self.save()
+	def inputDB(self):
+		cluster = json.loads(self.allocation.decode('utf-8'))
+		clusterID = ''
+		clusXPos = 0.0
+		clusYPos = 0.0
+		teamID = 0.0
+		teamRelX = 0.0
+		teamRelY = 0.0
+
+		for i in cluster:
+			clusterID = i 
+			clusXPos = cluster[i]['clusPos']['x']
+			clusYPos = cluster[i]['clusPos']['y']
+			clusAngle = cluster[i]['clusAngle']
+			for j in cluster[i]['teams']:
+				  teamID = j
+				  teamRelX = cluster[i]['teams'][j]['relativeX']
+				  teamRelY = cluster[i]['teams'][j]['relativeY']
+
+				  entry = Cluster(
+				  					clusterID=clusterID,
+				  					clusXPos=clusXPos,
+				  					clusYPos=clusYPos,
+				  					teamID=teamID,
+				  					teamRelX=teamRelX,
+				  					teamRelY=teamRelY
+				  					)
+				  entry.save()
+
+class Cluster(models.Model):
+	allocateDT = models.DateTimeField(default=dt.now())
+	clusterID = models.CharField(max_length=100)
+	clusXPos = models.FloatField(null=True)
+	clusYPos = models.FloatField(null=True)
+	teamID = models.FloatField(null=True)
+	teamRelX = models.FloatField(null=True)
+	teamRelY = models.FloatField(null=True)
+
+	def __str__(self):
+		return self.clusterID

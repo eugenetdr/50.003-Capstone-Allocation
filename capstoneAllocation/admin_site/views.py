@@ -1,11 +1,13 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Admin, UploadedFiles
+from .models import Admin, UploadedFiles, ReqData
 from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
+from datetime import datetime as dt
 import pandas as pd
+import csv
 
 
 
@@ -58,7 +60,20 @@ def approveConfirmation(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	context = {'adminID':user, 'active':active}
 	if (active==admin.status) & (active==1):
+		r=Request.objects.all()
+		context['request'] = r
 		return render(request, 'admin/approve.html', context)
+	else:
+		return redirect('adminIndex')
+
+def approve(request, active, user):
+	admin = Admin.objects.get(adminID=user)
+	context = {'adminID':user, 'active':active}
+	if (admin.isLoggedIn()) & (active==1):
+		r = Request.objects.all()
+		for entry in r:
+			entry.injectToDB()
+		return render(request, 'admin/confirmation.html',context)
 	else:
 		return redirect('adminIndex')
 
@@ -72,11 +87,16 @@ def editAllocation(request, active, user):
 
 def viewRequirements(request, active, user):
 	admin = Admin.objects.get(adminID=user)
-	context = {'adminID':user, 'active':active}
+	years = ReqData.objects.values('yearOfGrad').distinct().order_by('-yearOfGrad')
+	context = {'adminID':user, 'active':active, 'years':years}
 	if (active==admin.status) & (active==1):
-		r=Request.objects.all()
-		context['request'] = r
-		return render(request, 'admin/view.html', context)
+		if request.method == 'POST':
+			yearOfGrad=request.POST.get('yearOfGrad')
+			r=ReqData.objects.filter(yearOfGrad=yearOfGrad)
+			context['request'] = r
+			return render(request, 'admin/view.html', context)
+		else:
+			return render(request, 'admin/view.html', context)
 	else:
 		return redirect('adminIndex')
 

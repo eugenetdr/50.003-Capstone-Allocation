@@ -26,6 +26,17 @@
   <body>
   	<h1>View Requirements</h1>
   	<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
+  	<form method="post">
+      {% csrf_token %}
+   	  <label for="yearOfGrad">Year Of Graduation:</label>
+   	  <input list="yearOfGrad" name="yearOfGrad">
+      <datalist id="yearOfGrad">
+      	{% for year in years %}
+        	<option value="{{ year.yearOfGrad }}">
+		{% endfor %}
+      </datalist>
+      <input type="submit">
+    </form>
 
 	<table>
 		<tr>
@@ -46,7 +57,6 @@
 			<th>Chairs</th>
 			<th>HDMI Adaptors</th>
 			<th>Others</th>
-			<th>Approval</th>
 		</tr>
 		{% for r in request %}
 		<tr>
@@ -67,10 +77,6 @@
 			<td>{{ r.numChair }}</td>
 			<td>{{ r.numHDMI }}</td>
 			<td>{{ r.other }}</td>
-			<td>
-				<button type="button">Approve</button>
-				<button type="button">Reject</button>
-			</td>
 		</tr>
 		{% endfor %}
 	</table>
