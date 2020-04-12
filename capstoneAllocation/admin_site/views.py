@@ -2,15 +2,33 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Admin, UploadedFiles, ReqData
+# from .algorithm import run_Algorithm
 from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
 from datetime import datetime as dt
 import pandas as pd
 import csv
+import json
 
 
+################### Custom Functions #############################
 
+def prepInput():
+	data = ReqData.objects.filter(yearOfGrad=dt.now().year)
+	if data.count != 0:
+		projects = {}
+		for i in data:
+			r = ReqData.objects.get(teamID=i)
+			specs={}
+			specs['sLength'] = r.sLength
+			specs['sWidth'] = r.sWidth
+			specs['industry'] = r.industry
+			projects[i.teamID] = specs
+		return projects
+
+
+################### View Functions################################
 def index(request):
 	user = None
 	if request.method == 'POST':
@@ -50,6 +68,11 @@ def floorplan(request, active, user):
 				return HttpResponse("File Uploaded")
 			except MultiValueDictKeyError:
 				return render(request, 'admin/floorplan.html', context)
+		elif request.method == 'GET':
+			print('button is working')
+			data = prepInput()
+			print(data)
+			# output = run_Algorithm()
 		return render(request, 'admin/floorplan.html', context)
 	else:
 		return redirect('adminIndex')

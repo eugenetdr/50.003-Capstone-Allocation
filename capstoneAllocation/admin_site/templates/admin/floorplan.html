@@ -18,6 +18,9 @@
     <input onclick="location.href='{% url 'floorplan2' adminID active %}'" type="button" value="View Floorplan Level 2">
     <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
     <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
+    <form method="get">
+      <input type="submit" class="btn" value="Run Algorithm" name="runAlgo">
+    </form>  
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <input type="file" name="myfile">
