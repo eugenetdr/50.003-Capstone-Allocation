@@ -48,6 +48,7 @@ class Request(models.Model):
 	teamID = models.CharField(max_length=100)
 	projectName = models.CharField(max_length=100, null=True)
 	pType = models.CharField(max_length=100, null=True)
+	industry = models.CharField(max_length=100, null=True)
 	repEmail = models.EmailField(null=True)
 	pLength = models.FloatField(null=True)
 	pWidth = models.FloatField(null=True)

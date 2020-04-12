@@ -79,6 +79,7 @@ def approve(request, active, user):
 		r = Request.objects.all()
 		for entry in r:
 			entry.injectToDB()
+		# r.delete()
 		return render(request, 'admin/confirmation.html',context)
 	else:
 		return redirect('adminIndex')
@@ -240,6 +241,7 @@ def editAllocation2(request, active, user):
 def viewRequirements(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	years = ReqData.objects.values('yearOfGrad').distinct().order_by('-yearOfGrad')
+	print(years)
 	context = {'adminID':user, 'active':active, 'years':years}
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':

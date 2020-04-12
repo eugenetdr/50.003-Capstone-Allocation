@@ -204,6 +204,7 @@ class ReqData(models.Model):
 	projectName = models.CharField(max_length=100, null=True)
 	pType = models.CharField(max_length=100, null=True)
 	repEmail = models.EmailField(null=True)
+	industry = models.CharField(max_length=100, null=True)
 	pLength = models.FloatField(null=True)
 	pWidth = models.FloatField(null=True)
 	pHeight = models.FloatField(null=True)
@@ -234,28 +235,45 @@ class Allocation(models.Model):
 
 	def inputDB(self):
 		cluster = json.loads(self.allocation.decode('utf-8'))
+		clusLvl = 0.0
 		clusterID = ''
 		clusXPos = 0.0
 		clusYPos = 0.0
-		teamID = 0.0
+		clusAngle = 0.0
+		teamID = ''
+		industry = ''
+		projectName = ''
+		sLength = 0.0
+		sWidth = 0.0
 		teamRelX = 0.0
 		teamRelY = 0.0
 
 		for i in cluster:
+			clusLvl = cluster[i]['level']
 			clusterID = i 
 			clusXPos = cluster[i]['clusPos']['x']
 			clusYPos = cluster[i]['clusPos']['y']
 			clusAngle = cluster[i]['clusAngle']
 			for j in cluster[i]['teams']:
 				  teamID = j
+				  industry = cluster[i]['teams'][j]['industry']
+				  projectName = cluster[i]['teams'][j]['projectName']
+				  sLength = cluster[i]['teams'][j]['sLength']
+				  sWidth = cluster[i]['teams'][j]['sWidth']
 				  teamRelX = cluster[i]['teams'][j]['relativeX']
 				  teamRelY = cluster[i]['teams'][j]['relativeY']
 
 				  entry = Cluster(
+				  					clusLvl = clusLvl,
 				  					clusterID=clusterID,
 				  					clusXPos=clusXPos,
 				  					clusYPos=clusYPos,
+				  					clusAngle = clusAngle,
 				  					teamID=teamID,
+				  					industry = industry,
+				  					projectName = projectName,
+				  					sLength = sLength,
+				  					sWidth = sWidth,
 				  					teamRelX=teamRelX,
 				  					teamRelY=teamRelY
 				  					)
@@ -263,10 +281,16 @@ class Allocation(models.Model):
 
 class Cluster(models.Model):
 	allocateDT = models.DateTimeField(default=dt.now())
+	clusLvl = models.FloatField(null=True)
 	clusterID = models.CharField(max_length=100)
 	clusXPos = models.FloatField(null=True)
 	clusYPos = models.FloatField(null=True)
-	teamID = models.FloatField(null=True)
+	clusAngle = models.FloatField(null=True)
+	teamID = models.CharField(max_length=100)
+	industry = models.CharField(max_length=100)
+	projectName = models.CharField(max_length=100)
+	sLength = models.FloatField(null=True)
+	sWidth = models.FloatField(null=True)
 	teamRelX = models.FloatField(null=True)
 	teamRelY = models.FloatField(null=True)
 

@@ -21,7 +21,7 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <input type="file" name="myfile">
-      <input type="text" name="year" placeholder="Year of Grad">
+      <input type="text" name="year" placeholder="Year of Grad" autocomplete="off">
       <button type="submit">Upload</button>
   </form>
     <div class="page main" id = "pageMain">      

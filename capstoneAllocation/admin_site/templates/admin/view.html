@@ -25,17 +25,18 @@
   </head>
   <body>
   	<h1>View Requirements</h1>
-  	<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
+  	
   	<form method="post">
+  		<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
       {% csrf_token %}
    	  <label for="yearOfGrad">Year Of Graduation:</label>
-   	  <input list="yearOfGrad" name="yearOfGrad">
-      <datalist id="yearOfGrad">
+      <select id="yearOfGrad" name="yearOfGrad">
+      	<option disabled selected value> -- select an option -- </option>
       	{% for year in years %}
-        	<option value="{{ year.yearOfGrad }}">
+        	<option value="{{ year.yearOfGrad }}">{{ year.yearOfGrad }}</option>
 		{% endfor %}
-      </datalist>
-      <input type="submit">
+      </select>
+      <input type="submit" >
     </form>
 
 	<table>
@@ -43,6 +44,7 @@
 			<th>Team ID</th>
 			<th>Project Name</th>
 			<th>Project Type</th>
+			<th>Industry</th>
 			<th>Representative Email</th>
 			<th>Request Date</th>
 			<th>Prototype Dimensions (LxWxH)</th>
@@ -63,6 +65,7 @@
 			<td>{{ r.teamID }}</td>
 			<td>{{ r.projectName }}</td>
 			<td>{{ r.pType }}</td>
+			<td>{{ r.industry }}</td>
 			<td>{{ r.repEmail }}</td>
 			<td>{{ r.reqDateTime }}</td>
 			<td>{{ r.pLength }}x{{ r.pWidth }}x{{ r.pHeight }}</td>
