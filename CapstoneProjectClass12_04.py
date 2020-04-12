@@ -1,5 +1,4 @@
 import csv
-
 import operator
 
 class project:
@@ -14,7 +13,8 @@ class project:
     project_Placed = False
     project_Position = [0.0,0.0]
 
-    def __init__(self, name, pillar, length, width):
+    def __init__(self, ID, name, pillar, length, width):
+        self.project_ID = ID
         self.project_Position = [0.0,0.0]
         self.project_Name = name
         self.project_Length = length
@@ -79,7 +79,7 @@ class read_files:
                         #if dimensionLS == [-1.0,-1.0]:
                             #print(row[1])
                         industry_type_ls = ["1","2","3","4"]
-                        self.projects_dict[row[1]] = {"industry":industry_type_ls[line_count%4], "length":dimensionLS[1], "width":dimensionLS[0]}
+                        self.projects_dict[row[1]+"teamID"] = {"project_Name": row[1], "industry":industry_type_ls[line_count%4], "sLength":dimensionLS[1], "sWidth":dimensionLS[0]}
 
 class floor_Space:
 
@@ -202,12 +202,12 @@ def project_name_to_industry_dict(dd):
         project_dd = dd.get(i)
         industry_type = project_dd.get("industry")
         if industry_type in re_dd:
-            project_append = project(i ,"SUTD", project_dd.get("length") ,project_dd.get("width"))
+            project_append = project(i, project_dd.get("projectName"), "SUTD", project_dd.get("sLength") ,project_dd.get("sWidth"))
             project_append.setProjectIndustry(industry_type)
             re_dd[industry_type].append(project_append)
         else:
             re_dd[industry_type] = []
-            project_append = project(i,"SUTD", project_dd.get("length") ,project_dd.get("width"))
+            project_append = project(i, project_dd.get("projectName"), "SUTD", project_dd.get("sLength") ,project_dd.get("sWidth"))
             project_append.setProjectIndustry(industry_type)
             re_dd[industry_type].append(project_append)
     re_keys_list = re_dd.keys()
@@ -262,9 +262,9 @@ class run_Algorithm():
             cluster[i]['teams'] = {}
         for k in self.global_project_Array:
             if k.project_Placed==True:
-                cluster[k.project_FloorSpaceID]['teams'].update({k.project_Name:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':k.project_Position[0],'relativeY':k.project_Position[1]}})
+                cluster[k.project_FloorSpaceID]['teams'].update({k.project_ID:{k.project_Name:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':k.project_Position[0],'relativeY':k.project_Position[1]}}})
             else:
-                cluster[len(usedFloorSpace)]['teams'].update({k.project_Name:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':0.0,'relativeY':0.0}})
+                cluster[len(usedFloorSpace)]['teams'].update({k.project_ID:{k.project_Name:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':0.0,'relativeY':0.0}}})
         return cluster
 
 def produce_csv(project_Array):
