@@ -33,8 +33,6 @@ def index(request):
 	else:
 		return render(request, 'admin/login.html')
 
-
-
 def floorplan(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	context = {'adminID':user, 'active':active}
@@ -53,6 +51,14 @@ def floorplan(request, active, user):
 			except MultiValueDictKeyError:
 				return render(request, 'admin/floorplan.html', context)
 		return render(request, 'admin/floorplan.html', context)
+	else:
+		return redirect('adminIndex')
+
+def floorplan2(request, active, user):
+	admin = Admin.objects.get(adminID=user)
+	context = {'adminID':user, 'active':active}
+	if (active==admin.status) & (active==1):
+		return render(request, 'admin/floorplan2.html', context)
 	else:
 		return redirect('adminIndex')
 
@@ -79,9 +85,155 @@ def approve(request, active, user):
 
 def editAllocation(request, active, user):
 	admin = Admin.objects.get(adminID=user)
+	#TODO: call API to get current allocation from db, to get teams that are in level 1
+	allocation = {
+    'clus1': {
+        'clusPos':{'x':500.0, 'y':400.0},
+        'clusAngle': 0.0,
+		'clusLength': 200.0,
+		'clusBreadth': 200.0,
+        'teams':{
+            'team1': {
+		  'level':1, 
+                  'industry':'industry1', 
+                  'projectName':'project name 1', 
+                  'sLength':100.0, 
+                  'sWidth':100.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  },
+            'team2': {
+		  'level':1, 
+                  'industry':'industry2', 
+                  'projectName':'project name 2', 
+                  'sLength':100.0, 
+                  'sWidth':100.0, 
+                  'relativeX':0.0, 
+                  'relativeY':100.0
+                  }
+            }
+        },
+    'clus2': {
+        
+        'clusPos':{'x':0.0, 'y':0.0},
+        'clusAngle':0.0,
+		'clusLength': 200.0,
+		'clusBreadth': 200.0,
+        'teams':{
+            'team3': {
+		  'level':2,
+                  'industry':'industry3', 
+                  'projectName':'project name 3', 
+                  'sLength':0.0, 
+                  'sWidth':0.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  },
+            'team4': {
+		  'level':2,
+                  'industry':'industry4', 
+                  'projectName':'project name 4', 
+                  'sLength':0.0, 
+                  'sWidth':0.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  }
+            }
+        }
+    }
+
+	#loop through, keeping only those with level 1
+	lvl_1_allocation = {}
+	for cluster in list(allocation.keys()):
+		for team in list((allocation[cluster])["teams"].keys()):
+			if((((allocation[cluster])["teams"])[team])["level"] == 1):
+				if(cluster in list(lvl_1_allocation.keys())):
+					continue
+				else:
+				    lvl_1_allocation[cluster] = allocation[cluster]
+
+	allocation_data = json.dumps(lvl_1_allocation)
 	context = {'adminID':user, 'active':active}
+	context['allocation'] = allocation_data
 	if (active==admin.status) & (active==1):
 		return render(request, 'admin/edit.html', context)
+	else:
+		return redirect('adminIndex')
+
+def editAllocation2(request, active, user):
+	admin = Admin.objects.get(adminID=user)
+	#TODO: call API to get current allocation from db, to get teams that are in level 1
+	allocation = {
+    'clus1': {
+        'clusPos':{'x':0.0, 'y':0.0},
+        'clusAngle': 0.0,
+		'clusLength': 200.0,
+		'clusBreadth': 200.0,
+        'teams':{
+            'team1': {
+		  'level':1, 
+                  'industry':'industry1', 
+                  'projectName':'project name 1', 
+                  'sLength':0.0, 
+                  'sWidth':0.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  },
+            'team2': {
+		  'level':1, 
+                  'industry':'industry2', 
+                  'projectName':'project name 2', 
+                  'sLength':0.0, 
+                  'sWidth':0.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  }
+            }
+        },
+    'clus2': {
+        
+        'clusPos':{'x':0.0, 'y':0.0},
+        'clusAngle':0.0,
+		'clusLength': 200.0,
+		'clusBreadth': 200.0,
+        'teams':{
+            'team3': {
+		  'level':2,
+                  'industry':'industry3', 
+                  'projectName':'project name 3', 
+                  'sLength':0.0, 
+                  'sWidth':0.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  },
+            'team4': {
+		  'level':2,
+                  'industry':'industry4', 
+                  'projectName':'project name 4', 
+                  'sLength':0.0, 
+                  'sWidth':0.0, 
+                  'relativeX':0.0, 
+                  'relativeY':0.0
+                  }
+            }
+        }
+    }
+
+	#loop through, keeping only those with level 2
+	lvl_2_allocation = {}
+	for cluster in list(allocation.keys()):
+		for team in list((allocation[cluster])["teams"].keys()):
+			if((((allocation[cluster])["teams"])[team])["level"] == 2):
+				if(cluster in list(lvl_2_allocation.keys())):
+					continue
+				else:
+				    lvl_2_allocation[cluster] = allocation[cluster]
+
+	allocation_data = json.dumps(lvl_2_allocation)
+	context = {'adminID':user, 'active':active}
+	context['allocation'] = allocation_data
+	if (active==admin.status) & (active==1):
+		return render(request, 'admin/edit2.html', context)
 	else:
 		return redirect('adminIndex')
 

@@ -1,11 +1,14 @@
 .draggable {
+  position: absolute; 
+  top: 10px;
+  left: 10px; 
   width: 5%;
   min-height: 0.75em;
   margin: 10%;
   background-color: #29e;
   color: white;
   border-radius: 0.75em;
-  padding: 4%;
+  padding: 5px;
   touch-action: none;
   user-select: none;
   -webkit-transform: translate(0px, 0px);
