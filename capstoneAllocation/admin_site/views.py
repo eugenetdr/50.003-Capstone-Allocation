@@ -61,9 +61,11 @@ def floorplan(request, active, user):
 				print('button is working')
 				data = prepInput()
 				print(data)
-				output = run_Algorithm(data)
-				print("reset")
-				print(output.return_cluster())
+				try:
+					output = run_Algorithm(data)
+					alloc = output.return_cluster()
+				except:
+					return HttpResponse("Invalid response present")
 			else:
 				try:
 					request.FILES['myfile']

@@ -51,7 +51,7 @@ class Team(models.Model):
 			if i<10:
 				tid = '202000'+str(i)
 			elif i<100:
-				tid = '2020'+str(i)
+				tid = '20200'+str(i)
 			else:
 				tid = '2020'+str(i)
 			sLength=rand.choice([1,1.5,2,1,1.5,2,3])
@@ -120,7 +120,7 @@ class Team(models.Model):
 			req.numChair=numChair
 			req.other=other
 
-			print(projectName, type(projectName))
+			print(projectName)
 			req.save()
 
 
