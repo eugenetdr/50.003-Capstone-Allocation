@@ -44,6 +44,7 @@ def spaceRequest(request, team_id, active):
 			'active':team.status,
 			'projectName':r.projectName,
 			'prototypeType':r.pType,
+			'industry':r.industry,
 			'representativeEmail':r.repEmail,
 			'prototypeLength':r.pLength,
 			'prototypeWidth':r.pWidth,
@@ -107,7 +108,7 @@ def checkForm(request, team_id, active):
 					API_dict["showcaseHeight"] = showsize[2]
 				
 				numerical_inputs = ["powerpoints", "bigPedestals", "smallPedestals", "monitors", "TVs", "tables", "chairs", "HDMIAdaptors"]
-				text_inputs = ["representativeEmail", "projectName", "pedestalDescription", "others"]
+				text_inputs = ["representativeEmail", "projectName", "pedestalDescription", "others", "industry"]
 				for column in text_inputs:
 					API_dict[column] = request.POST[column]
 				for column in numerical_inputs:

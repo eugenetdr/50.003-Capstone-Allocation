@@ -26,9 +26,8 @@
   <body>
   	<h1>View Requirements</h1>
   	
-  	<form method="post">
+  	<form method="get">
   		<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
-      {% csrf_token %}
    	  <label for="yearOfGrad">Year Of Graduation:</label>
       <select id="yearOfGrad" name="yearOfGrad">
       	<option disabled selected value> -- select an option -- </option>

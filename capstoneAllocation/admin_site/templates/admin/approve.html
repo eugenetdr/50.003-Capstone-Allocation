@@ -25,9 +25,18 @@
   </head>
   <body>
   	<h1>Approval Page</h1>
-  	<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
-    <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
-    <input onclick="location.href='{% url 'confirm' adminID active %}'" type="button" value="Approve All">
+    <form method="post">
+      {% csrf_token %}
+      <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
+      <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
+      <input onclick="location.href='{% url 'confirm' adminID active %}'" type="button" value="Approve All">
+      <label for="yearOfEntry">Year Of Entry: </label>
+      <input required type="text" id="yearOfEntry" name="yearOfEntry" autocomplete="off">
+      <label for="numEntries">Number Of Entries: </label>
+      <input required type="number" id="numEntries" name="numEntries" autocomplete="off">
+
+      <input type="submit" value="Reset" >
+    </form>
     
 
   <table>
@@ -73,8 +82,7 @@
       <td>{{ r.numHDMI }}</td>
       <td>{{ r.other }}</td>
       <td>
-        <button type="button">Approve</button>
-        <button type="button">Reject</button>
+        <button type="button">Notify</button>
       </td>
     </tr>
     {% endfor %}

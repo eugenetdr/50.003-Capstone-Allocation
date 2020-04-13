@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Admin, UploadedFiles, ReqData
-# from .algorithm import run_Algorithm
+from .algorithm import run_Algorithm
 from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
@@ -21,6 +21,7 @@ def prepInput():
 		for i in data:
 			r = ReqData.objects.get(teamID=i)
 			specs={}
+			specs['projectName'] = r.projectName
 			specs['sLength'] = r.sLength
 			specs['sWidth'] = r.sWidth
 			specs['industry'] = r.industry
@@ -56,23 +57,26 @@ def floorplan(request, active, user):
 	context = {'adminID':user, 'active':active}
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
-			try:
-				request.FILES['myfile']
-				myfile = request.FILES['myfile']
-				f=UploadedFiles(yearOfGrad=request.POST["year"], fileName=myfile.name, uploadedFile=myfile)
-				f.save()
-				df=f.manageFile()
-				output, dim = f.convertDfToDB(df, request.POST["year"])
-				df=f.updateDimToData(output, dim)
-				f.inputDB(df)
-				return HttpResponse("File Uploaded")
-			except MultiValueDictKeyError:
-				return render(request, 'admin/floorplan.html', context)
-		elif request.method == 'GET':
-			print('button is working')
-			data = prepInput()
-			print(data)
-			# output = run_Algorithm()
+			if 'runAlgo' in request.POST:
+				print('button is working')
+				data = prepInput()
+				print(data)
+				output = run_Algorithm(data)
+				print("reset")
+				print(output.return_cluster())
+			else:
+				try:
+					request.FILES['myfile']
+					myfile = request.FILES['myfile']
+					f=UploadedFiles(yearOfGrad=request.POST["year"], fileName=myfile.name, uploadedFile=myfile)
+					f.save()
+					df=f.manageFile()
+					output, dim = f.convertDfToDB(df, request.POST["year"])
+					df=f.updateDimToData(output, dim)
+					f.inputDB(df)
+					return HttpResponse("File Uploaded")
+				except MultiValueDictKeyError:
+					return render(request, 'admin/floorplan.html', context)
 		return render(request, 'admin/floorplan.html', context)
 	else:
 		return redirect('adminIndex')
@@ -91,6 +95,29 @@ def approveConfirmation(request, active, user):
 	if (active==admin.status) & (active==1):
 		r=Request.objects.all()
 		context['request'] = r
+		if request.method == 'POST':
+			if (len(request.POST.get('yearOfEntry'))==4):
+				try:
+					year = int(request.POST.get('yearOfEntry'))
+					numEntries = int(request.POST.get('numEntries'))
+				except:
+					return render(request, 'admin/confirmation.html',context)
+				finally:
+
+					r.delete()
+					Team.objects.all().delete()
+					print(r.all(), Team.objects.all())
+					for i in range(1, numEntries+1):
+						if i<10:
+							t = str(year)+'00'+str(i)
+						elif i<100:
+							t = str(year)+'0'+str(i)
+						else:
+							t = str(year)+str(i)
+						team = Team(pk=i, teamID=t)
+						team.save()
+						req = Request(pk=i, teamID=t, yearOfGrad=year)
+						req.save()
 		return render(request, 'admin/approve.html', context)
 	else:
 		return redirect('adminIndex')
@@ -99,10 +126,10 @@ def approve(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	context = {'adminID':user, 'active':active}
 	if (admin.isLoggedIn()) & (active==1):
+		ReqData.objects.filter(yearOfGrad=dt.now().year).delete()
 		r = Request.objects.all()
 		for entry in r:
 			entry.injectToDB()
-		# r.delete()
 		return render(request, 'admin/confirmation.html',context)
 	else:
 		return redirect('adminIndex')
@@ -267,8 +294,8 @@ def viewRequirements(request, active, user):
 	print(years)
 	context = {'adminID':user, 'active':active, 'years':years}
 	if (active==admin.status) & (active==1):
-		if request.method == 'POST':
-			yearOfGrad=request.POST.get('yearOfGrad')
+		if request.method == 'GET':
+			yearOfGrad=request.GET.get('yearOfGrad')
 			r=ReqData.objects.filter(yearOfGrad=yearOfGrad)
 			context['request'] = r
 			return render(request, 'admin/view.html', context)

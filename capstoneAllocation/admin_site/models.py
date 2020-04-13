@@ -40,6 +40,8 @@ class Admin(models.Model):
 		self.status=0
 		self.save()
 
+	
+
 class UploadedFiles(models.Model):
 	yearOfGrad = models.IntegerField(default=dt.now().year)
 	fileName=models.CharField(max_length=100)
