@@ -45,7 +45,8 @@ class Team(models.Model):
 		self.requestMade=1
 		self.save()
 
-	def populate(self, numEntries):
+	def populate(self):
+		numEntries = Request.objects.all().count()
 		for i in range(1, numEntries+1):
 			req=Request.objects.get(pk=i)
 			if i<10:

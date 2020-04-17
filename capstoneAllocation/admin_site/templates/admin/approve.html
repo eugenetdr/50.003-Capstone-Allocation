@@ -42,6 +42,7 @@
   <table>
     <tr>
       <th>Team ID</th>
+      <th>Team PW</th>
       <th>Project Name</th>
       <th>Project Type</th>
       <th>Industry</th>
@@ -63,24 +64,25 @@
     </tr>
     {% for r in request %}
     <tr>
-      <td>{{ r.teamID }}</td>
-      <td>{{ r.projectName }}</td>
-      <td>{{ r.pType }}</td>
-      <td>{{ r.industry }}</td>
-      <td>{{ r.repEmail }}</td>
-      <td>{{ r.reqDateTime }}</td>
-      <td>{{ r.pLength }}x{{ r.pWidth }}x{{ r.pHeight }}</td>
-      <td>{{ r.sLength }}x{{ r.sWidth }}x{{ r.sHeight }}</td>
-      <td>{{ r.numPP }}</td>
-      <td>{{ r.numBigPed }}</td>
-      <td>{{ r.numSmallPed }}</td>
-      <td>{{ r.pedDesc }}</td>
-      <td>{{ r.numMonitor }}</td>
-      <td>{{ r.numTV }}</td>
-      <td>{{ r.numTable }}</td>
-      <td>{{ r.numChair }}</td>
-      <td>{{ r.numHDMI }}</td>
-      <td>{{ r.other }}</td>
+      <td>{{ r.req.teamID }}</td>
+      <td>{{ r.tPw.teamPW }}</td>
+      <td>{{ r.req.projectName }}</td>
+      <td>{{ r.req.pType }}</td>
+      <td>{{ r.req.industry }}</td>
+      <td>{{ r.req.repEmail }}</td>
+      <td>{{ r.req.reqDateTime }}</td>
+      <td>{{ r.req.pLength }}x{{ r.req.pWidth }}x{{ r.req.pHeight }}</td>
+      <td>{{ r.req.sLength }}x{{ r.req.sWidth }}x{{ r.req.sHeight }}</td>
+      <td>{{ r.req.numPP }}</td>
+      <td>{{ r.req.numBigPed }}</td>
+      <td>{{ r.req.numSmallPed }}</td>
+      <td>{{ r.req.pedDesc }}</td>
+      <td>{{ r.req.numMonitor }}</td>
+      <td>{{ r.req.numTV }}</td>
+      <td>{{ r.req.numTable }}</td>
+      <td>{{ r.req.numChair }}</td>
+      <td>{{ r.req.numHDMI }}</td>
+      <td>{{ r.req.other }}</td>
       <td>
         <button type="button">Notify</button>
       </td>

@@ -7,9 +7,12 @@ from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
 from django.utils.datastructures import MultiValueDictKeyError
 from datetime import datetime as dt
+from itertools import chain
 import pandas as pd
 import csv
 import json
+import string
+import random
 
 
 ################### Custom Functions #############################
@@ -28,6 +31,13 @@ def prepInput():
 			projects[i.teamID] = specs
 		return projects
 
+def genPW():
+	pw = ''
+	for i in range(8):
+		pw+=random.choice(list(string.ascii_letters+string.digits))
+	if pw in Team.objects.values_list('teamPW', flat=True):
+		pw=genPW()
+	return pw
 
 ################### View Functions################################
 def index(request):
@@ -78,7 +88,7 @@ def floorplan(request, active, user):
 					f.inputDB(df)
 					return HttpResponse("File Uploaded")
 				except MultiValueDictKeyError:
-					return render(request, 'admin/floorplan.html', context)
+					return render('admin/floorplan.html', context)
 		return render(request, 'admin/floorplan.html', context)
 	else:
 		return redirect('adminIndex')
@@ -95,17 +105,20 @@ def approveConfirmation(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	context = {'adminID':user, 'active':active}
 	if (active==admin.status) & (active==1):
-		r=Request.objects.all()
-		context['request'] = r
+		r=Request.objects.all().order_by('pk')
+		tPw=Team.objects.all().only('teamPW').order_by('pk')
+		concat = []
+		for i in range(r.count()):
+			concat.append({"req":r[i], "tPw":tPw[i]})
+		context['request'] = concat
 		if request.method == 'POST':
 			if (len(request.POST.get('yearOfEntry'))==4):
 				try:
 					year = int(request.POST.get('yearOfEntry'))
 					numEntries = int(request.POST.get('numEntries'))
 				except:
-					return render(request, 'admin/confirmation.html',context)
+					return render(request, 'admin/approve.html', context)
 				finally:
-
 					r.delete()
 					Team.objects.all().delete()
 					print(r.all(), Team.objects.all())
@@ -116,10 +129,11 @@ def approveConfirmation(request, active, user):
 							t = str(year)+'0'+str(i)
 						else:
 							t = str(year)+str(i)
-						team = Team(pk=i, teamID=t)
+						team = Team(pk=i, teamID=t, teamPW=genPW())
 						team.save()
 						req = Request(pk=i, teamID=t, yearOfGrad=year)
 						req.save()
+			return redirect('approve', user=admin, active=active)
 		return render(request, 'admin/approve.html', context)
 	else:
 		return redirect('adminIndex')
