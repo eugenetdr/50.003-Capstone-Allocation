@@ -218,16 +218,16 @@ class run_Algorithm():
             if i.floorspace_Allocated:
                 usedFloorSpace.append(i)
         for i in range(len(usedFloorSpace)+1):
-            cluster[i] = {}
-            cluster[i]['level'] = 1  
-            cluster[i]['clusPos'] = {'x':0.0,'y':0.0}
-            cluster[i]['clusAngle'] = 0.0
-            cluster[i]['teams'] = {}
+            cluster[str(i)] = {}
+            cluster[str(i)]['level'] = 1  
+            cluster[str(i)]['clusPos'] = {'x':0.0,'y':0.0}
+            cluster[str(i)]['clusAngle'] = 0.0
+            cluster[str(i)]['teams'] = {}
         for k in self.global_project_Array:
             if k.project_Placed==True:
-                cluster[k.project_FloorSpaceID]['teams'].update({k.project_ID:{k.project_Name:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':k.project_Position[0],'relativeY':k.project_Position[1]}}})
+                cluster[str(k.project_FloorSpaceID)]['teams'].update({k.project_ID:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':k.project_Position[0],'relativeY':k.project_Position[1]}})
             else:
-                cluster[len(usedFloorSpace)]['teams'].update({k.project_ID:{k.project_Name:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':0.0,'relativeY':0.0}}})
+                cluster[str(len(usedFloorSpace))]['teams'].update({k.project_ID:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':0.0,'relativeY':0.0}})
         return cluster
 
     unplacedProjs = []
