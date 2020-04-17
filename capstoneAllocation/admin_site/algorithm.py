@@ -1,3 +1,4 @@
+  
 import operator
 
 class project:
@@ -54,15 +55,18 @@ class floor_Space:
     floorspace_Position = [0.0,0.0]
     floorspace_Projects = []
 
-    def __init__(self, ID, width, length):
+    def __init__(self, ID, width, length, x, y, degree, level):
+        self.floorspace_Degree = degree
         self.floorspace_ID = ID
         self.floorspace_Area = length * width
         self.floorspace_Dimensions = [length, width]
         self.floorspace_Width = width
         self.floorspace_Length = length
-        self.floorspace_Position = [0.0,0.0]
+        self.floorspace_Position = [x,y]
         self.floorspace_Projects = []
         self.floorspace_Allocated = False
+        self.floorspace_Level = level
+        self.floorspace_Position_in_floorplan = [x,y]
 
 
     def setPosition(self,x,y):
@@ -158,18 +162,18 @@ def packFloorspace_Iter(floorSpaceArray, project_Array):
     return project_Array
 
 def project_name_to_industry_dict(dd):
-    keys_list = dd.keys()
+    keys_list = dd.get("teams").keys()
     re_dd = {}
     for i in keys_list:
-        project_dd = dd.get(i)
+        project_dd = dd["teams"].get(i)
         industry_type = project_dd.get("industry")
         if industry_type in re_dd:
-            project_append = project(i, project_dd.get("projectName"), "SUTD", project_dd.get("sLength") ,project_dd.get("sWidth"))
+            project_append = project(i, project_dd.get("projectName"),"SUTD", project_dd.get("sLength") ,project_dd.get("sWidth"))
             project_append.setProjectIndustry(industry_type)
             re_dd[industry_type].append(project_append)
         else:
             re_dd[industry_type] = []
-            project_append = project(i, project_dd.get("projectName"), "SUTD", project_dd.get("sLength") ,project_dd.get("sWidth"))
+            project_append = project(i,project_dd.get("projectName"),"SUTD", project_dd.get("sLength") ,project_dd.get("sWidth"))
             project_append.setProjectIndustry(industry_type)
             re_dd[industry_type].append(project_append)
     re_keys_list = re_dd.keys()
@@ -178,10 +182,31 @@ def project_name_to_industry_dict(dd):
         re_dd[j] = sorted(ls, key=operator.attrgetter("project_Area"), reverse = True)
     return re_dd
 
+def pixel_to_meter(pixel):
+    return pixel/16.4
+
 def createFloorplan():
     floorspace_Array = []
-    for i in range(10):
-        floorspace_Array.append(floor_Space(i,10.0,10.0))
+    floorspace_Array.append(floor_Space(0,pixel_to_meter(40),pixel_to_meter(130),420,275,0,1))
+    floorspace_Array.append(floor_Space(1,pixel_to_meter(67),pixel_to_meter(67),510,265,0,1))
+    floorspace_Array.append(floor_Space(2,pixel_to_meter(115),pixel_to_meter(93),550,150,0,1))
+    floorspace_Array.append(floor_Space(3,pixel_to_meter(65),pixel_to_meter(130),650,300,0,1))
+    floorspace_Array.append(floor_Space(4,pixel_to_meter(640),pixel_to_meter(640),640,460,-40,1))
+    floorspace_Array.append(floor_Space(5,pixel_to_meter(216),pixel_to_meter(100),850,270,0,1))
+    floorspace_Array.append(floor_Space(6,pixel_to_meter(250),pixel_to_meter(90),850,400,0,1))
+    floorspace_Array.append(floor_Space(7,pixel_to_meter(140),pixel_to_meter(117),850,570,0,1))
+    floorspace_Array.append(floor_Space(8,pixel_to_meter(75),pixel_to_meter(175),1010,250,0,1))
+    floorspace_Array.append(floor_Space(9,pixel_to_meter(90),pixel_to_meter(90),1175,250,0,1))
+    floorspace_Array.append(floor_Space(10,pixel_to_meter(100),pixel_to_meter(175),1080,450,315,1))
+
+    floorspace_Array.append(floor_Space(11,pixel_to_meter(354),pixel_to_meter(60),864,188,0,2))
+    floorspace_Array.append(floor_Space(12,pixel_to_meter(259),pixel_to_meter(60),1000,540,-30,2))
+    floorspace_Array.append(floor_Space(13,pixel_to_meter(259),pixel_to_meter(60),652,500,30,2))
+
+    illegal_projects = floor_Space(-1,-1,-1,0,0,0,0)
+    illegal_projects.allocateFloorspace()
+    floorspace_Array.append(illegal_projects)
+    
     return floorspace_Array
 
 def sort_by_industry(projects_Array):
@@ -208,52 +233,22 @@ class run_Algorithm():
         industry_dd = project_name_to_industry_dict(project_dict_by_name)
         project_Array = shuffle_Projects(industry_dd)
         self.global_project_Array = packFloorspace_Iter(self.floorspace_Array, project_Array)
-        #produce_report(floorspace_Array, global_project_Array)
-        ##self.return_cluster(floorspace_Array,global_project_Array)
+
     def return_cluster(self):
         usedFloorSpace = []
         cluster = {}
         for i in self.floorspace_Array:
             if i.floorspace_Allocated:
                 usedFloorSpace.append(i)
-        for i in range(len(usedFloorSpace)+1):
-            cluster[str(i)] = {}
-            cluster[str(i)]['level'] = 1  
-            cluster[str(i)]['clusPos'] = {'x':0.0,'y':0.0}
-            cluster[str(i)]['clusAngle'] = 0.0
-            cluster[str(i)]['teams'] = {}
+        for i in usedFloorSpace:
+            cluster[str(i.floorspace_ID)] = {}
+            cluster[str(i.floorspace_ID)]['level'] = i.floorspace_Level 
+            cluster[str(i.floorspace_ID)]['clusPos'] = {'x':i.floorspace_Position_in_floorplan[0],'y':i.floorspace_Position_in_floorplan[1]}
+            cluster[str(i.floorspace_ID)]['clusAngle'] = i.floorspace_Degree
+            cluster[str(i.floorspace_ID)]['teams'] = {}
         for k in self.global_project_Array:
             if k.project_Placed==True:
                 cluster[str(k.project_FloorSpaceID)]['teams'].update({k.project_ID:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':k.project_Position[0],'relativeY':k.project_Position[1]}})
             else:
-                cluster[str(len(usedFloorSpace))]['teams'].update({k.project_ID:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':0.0,'relativeY':0.0}})
+                cluster[str(-1)]['teams'].update({k.project_ID:{'industry':k.project_Industry,'projectName':k.project_Name,'sLength':k.project_Length,'sWidth':k.project_Width,'relativeX':0.0,'relativeY':0.0}})
         return cluster
-
-    unplacedProjs = []
-    count = 0
-    usedFloorSpace = []
-    for i in floorspace_Array:
-        if i.floorspace_Allocated:
-            print("Floorspace ID %d:" % i.floorspace_ID)
-            for l in i.floorspace_Projects:
-                print(l.project_Name)
-            usedFloorSpace.append(i)
-    ls = []
-    for k in global_project_Array:
-        if k.project_Placed==False:
-            count = count + 1
-            if k.project_Dimensions == [-1.0,-1.0]:
-                ls.append(k.project_Name + " has illegal size requirements.")
-            else:
-                ls.append(k.project_Name + " does not fit in floorplan.")
-    print("\n")
-    print("%d projects have not been placed:" %count)
-    for m in ls:
-        print(m)
-
-    print("\n")
-    print("FloorSpace ID Used:")
-    for j in usedFloorSpace:
-        if j.floorspace_Allocated:
-            print(j.floorspace_ID)
-    print("\n")
