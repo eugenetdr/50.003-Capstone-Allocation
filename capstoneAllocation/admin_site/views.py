@@ -29,7 +29,7 @@ def prepInput():
 			specs['sWidth'] = r.sWidth
 			specs['industry'] = r.industry
 			projects[i.teamID] = specs
-		return projects
+		return {'teams':projects}
 
 def genPW():
 	pw = ''
@@ -38,6 +38,21 @@ def genPW():
 	if pw in Team.objects.values_list('teamPW', flat=True):
 		pw=genPW()
 	return pw
+
+def resetEntries(year, numEntries):
+	Request.objects.all().delete()
+	Team.objects.all().delete()
+	for i in range(1, numEntries+1):
+		if i<10:
+			t = str(year)+'00'+str(i)
+		elif i<100:
+			t = str(year)+'0'+str(i)
+		else:
+			t = str(year)+str(i)
+		team = Team(pk=i, teamID=t, teamPW=genPW())
+		team.save()
+		req = Request(pk=i, teamID=t, yearOfGrad=year)
+		req.save()
 
 ################### View Functions################################
 def index(request):
@@ -68,12 +83,17 @@ def floorplan(request, active, user):
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
 			if 'runAlgo' in request.POST:
-				print('button is working')
 				data = prepInput()
 				print(data)
 				try:
+					print("\n\n\n\n\n\n")
+					print(1)
 					output = run_Algorithm(data)
+					print("\n\n\n\n\n\n")
+					print(2)
 					alloc = output.return_cluster()
+					print("\n\n\n\n\n\n")
+					print(alloc)
 				except:
 					return HttpResponse("Invalid response present")
 			else:
@@ -119,20 +139,7 @@ def approveConfirmation(request, active, user):
 				except:
 					return render(request, 'admin/approve.html', context)
 				finally:
-					r.delete()
-					Team.objects.all().delete()
-					print(r.all(), Team.objects.all())
-					for i in range(1, numEntries+1):
-						if i<10:
-							t = str(year)+'00'+str(i)
-						elif i<100:
-							t = str(year)+'0'+str(i)
-						else:
-							t = str(year)+str(i)
-						team = Team(pk=i, teamID=t, teamPW=genPW())
-						team.save()
-						req = Request(pk=i, teamID=t, yearOfGrad=year)
-						req.save()
+					resetEntries(year, numEntries)
 			return redirect('approve', user=admin, active=active)
 		return render(request, 'admin/approve.html', context)
 	else:

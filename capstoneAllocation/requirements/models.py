@@ -120,6 +120,7 @@ class Team(models.Model):
 			req.numTable=numTable
 			req.numChair=numChair
 			req.other=other
+			req.reqDateTime=reqDateTime
 
 			print(projectName)
 			req.save()

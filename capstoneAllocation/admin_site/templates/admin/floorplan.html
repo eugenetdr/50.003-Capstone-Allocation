@@ -12,14 +12,15 @@
   </head>
   <body>
   	<h1>Floorplan Level 1</h1>
-    <input onclick="location.href='{% url 'requirements' adminID active %}'" type="button" value="View Requirements">
-    <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit Floorplan Level 1">
-    <input onclick="location.href='{% url 'edit2' adminID active %}'" type="button" value="Edit Floorplan Level 2">
-    <input onclick="location.href='{% url 'floorplan2' adminID active %}'" type="button" value="View Floorplan Level 2">
-    <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
-    <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
+    
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
+      <input onclick="location.href='{% url 'requirements' adminID active %}'" type="button" value="View Requirements">
+      <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit Floorplan Level 1">
+      <input onclick="location.href='{% url 'edit2' adminID active %}'" type="button" value="Edit Floorplan Level 2">
+      <input onclick="location.href='{% url 'floorplan2' adminID active %}'" type="button" value="View Floorplan Level 2">
+      <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
+      <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
       <input type="submit" class="btn" value="runAlgo" name="runAlgo">
       <input type="file" name="myfile">
       <input type="text" name="year" placeholder="Year of Grad" autocomplete="off">
