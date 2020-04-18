@@ -26,6 +26,8 @@ var foo = ((allocation).replace(/&(l|g|quo)t;/g, function(a,b){
 
 var i;
 var frames = {};
+var delta1 = {};
+var delta2 = {};
 
 function firstRotateTransform(target, i){
   frames[i].set("left", getComputedStyle(target).left);
@@ -90,6 +92,8 @@ function attachEvents(element){
 
   }).on("scale", ({ target, delta, clientX, clientY, isPinch}) => {
     i = element.id;
+    delta1[i] =  delta[0];
+    delta2[i] = delta[1];
     const scaleX = frames[i].get("transform", "scaleX") * delta[0];
     const scaleY = frames[i].get("transform", "scaleY") * delta[1];
     frames[i].set("transform", "scaleX", scaleX);

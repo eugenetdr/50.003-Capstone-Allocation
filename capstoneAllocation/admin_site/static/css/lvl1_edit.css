@@ -42,7 +42,7 @@ a {
 
 .moveable {
   font-family: "Roboto", sans-serif;
-  position: absolute;
+  position: relative;
   width: 125px;
   height: 100px;
   text-align: center;
