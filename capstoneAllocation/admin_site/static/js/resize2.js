@@ -26,6 +26,8 @@ var foo = ((allocation).replace(/&(l|g|quo)t;/g, function(a,b){
 
 var i;
 var frames = {};
+var delta1 = {};
+var delta2 = {};
 
 function firstRotateTransform(target, i){
   frames[i].set("left", getComputedStyle(target).left);
@@ -83,13 +85,26 @@ function attachEvents(element){
     //get real left and top
     var real_left = (getComputedStyle(document.getElementById(i).nextElementSibling).transform.split(",")[12].slice(1));
     var real_top = (getComputedStyle(document.getElementById(i).nextElementSibling).transform.split(",")[13].slice(1));
-    console.log("style of the control box is");
-    console.log(getComputedStyle(document.getElementById(i).nextElementSibling));
+    //console.log("style of the control box is");
+    //console.log(getComputedStyle(document.getElementById(i).nextElementSibling));
     //document.getElementsByClassName("sr-only")[0];
+    
+    moveable_ele = document.getElementById(i);
+    control_box = moveable_ele.nextElementSibling;
+    var st = getComputedStyle(document.getElementById(i));
+                var tr = st.getPropertyValue("-webkit-transform") ||
+                        st.getPropertyValue("-moz-transform") ||
+                        st.getPropertyValue("-ms-transform") ||
+                        st.getPropertyValue("-o-transform") ||
+                        st.getPropertyValue("transform") ||
+                        "fail...";
+                console.log(st);
     !isPinch && setLabel(clientX, clientY, `X: ${real_left}px<br/>Y: ${real_top}px`);
 
   }).on("scale", ({ target, delta, clientX, clientY, isPinch}) => {
     i = element.id;
+    delta1[i] =  delta[0];
+    delta2[i] = delta[1];
     const scaleX = frames[i].get("transform", "scaleX") * delta[0];
     const scaleY = frames[i].get("transform", "scaleY") * delta[1];
     frames[i].set("transform", "scaleX", scaleX);
@@ -113,15 +128,25 @@ function attachEvents(element){
     //console.log("transform of the element is");
     //console.log(getComputedStyle(document.getElementById("moveable_"+i)).transform);
 
-    console.log("transform of the control box is");
-    console.log(getComputedStyle(document.getElementById(i).nextElementSibling.firstChild).transform);
+
+
+
+
+
+
+
+
     !isPinch && setLabel(clientX, clientY, `R: ${deg.toFixed(1)}`);
   }).on("resize", ({ target, width, height, clientX, clientY, isPinch}) => {
     i = element.id;
     frames[i].set("width", `${width}px`);
     frames[i].set("height", `${height}px`);
+
     setTransform(target, i);
-    !isPinch &&  setLabel(clientX, clientY, `W: ${width}px<br/>H: ${height}px`);
+
+    
+    
+                !isPinch &&  setLabel(clientX, clientY, `W: ${width}px<br/>H: ${height}px`);
   }).on("warp", ({ target, multiply, delta, clientX, clientY}) => {
     i = element.id;
     frames[i].set("transform", "matrix3d", multiply(frames[i].get("transform", "matrix3d"), delta));
@@ -172,9 +197,14 @@ for (var i in myData) {
         //define Cx, Cy, Angle, ClusLength, ClusWidth, then C
         var Cx = myData[i].clusPos.x;
         var Cy = myData[i].clusPos.y;
+        
         var Angle = myData[i].clusAngle;
         var ClusLength = myData[i].clusLength;
         var ClusWidth = myData[i].clusBreadth;
+        var clus_center_left = Cx + (ClusWidth/2);
+        var clus_center_top = Cy - (ClusLength/2);
+
+
         var offset_x = Cx - (ClusWidth/2);
         var offset_y = Cy + (ClusLength/2);
 
@@ -184,7 +214,13 @@ for (var i in myData) {
           if(((myData[i])["teams"]).hasOwnProperty(j)){
             //get relx, rely, industry
             var relX = myData[i].teams[j].relativeX;
+            var sWidth = myData[i].teams[j].sWidth;
+            var center_left = relX + (sWidth/2);
+
             var relY = myData[i].teams[j].relativeY;
+            var sLength = myData[i].teams[j].sLength;
+            var center_top = relY - (sLength/2);
+
             var projectName = myData[i].teams[j].projectName;
 
             industry = myData[i].teams[j].industry;
@@ -234,8 +270,92 @@ for (var i in myData) {
             moveable.moved = false;
             moveable.rotated = false;
 
+            
+
+            console.log("the elements real left is: ");
+            console.log(getComputedStyle(moveableElement.nextElementSibling).transform.split(",")[12].slice(1));
+
+            console.log("the elements real top is: ");
+            console.log(getComputedStyle(moveableElement.nextElementSibling).transform.split(",")[13].slice(1));
+            
+            //set it to 0,0
+
+
+            var init_left, init_right, init_top, init_bottom;
+
+            init_left = parseFloat((getComputedStyle(moveableElement).left), 10) - parseFloat(getComputedStyle(moveableElement.nextElementSibling).transform.split(",")[12].slice(1));
+            init_top = parseFloat((getComputedStyle(moveableElement).top), 10) - parseFloat(getComputedStyle(moveableElement.nextElementSibling).transform.split(",")[13].slice(1));
+            
+            init_right = -(init_left);
+            init_bottom = -(init_top);
+            
+            moveableElement.style.left = init_left + "px";
+            moveableElement.style.top = init_top + "px";
+            moveableElement.style.right = init_right + "px";
+            moveableElement.style.bottom = init_bottom + "px";
+
+            //This section changes the x and y to the objective
+            //formula: Rx = Cx + (Ox  * cos(θ)) - (Oy * sin(θ)), ox = width/2, Cy = center about which you are rotating
+            //         Ry = Cy + (Ox  * sin(θ)) + (Oy * cos(θ))
+            //rotating point ()
+            
+            //vars involved: Cx, Cy, relX, relY, offset_x, offset_y
+            
+            var angle_rad = Angle*(Math.PI / 180);
+
+            /*
+            
+            console.log("Cx from dict is " + Cx);
+            console.log("Cy from dict is " + Cy);
+            console.log("relX from dict is " + relX);
+            console.log("relY from dict is " + relY);
+            console.log("offset_x from dict is " + offset_x);
+            console.log("offet_y from dict is " + offset_y);
+            console.log("angle in radians from dict is " + angle_rad);
+            //var objective_left = Cx + (relX + offset_x - Cx)*Math.cos(angle_rad) - ((-relY) + offset_y - Cy)*Math.sin(angle_rad); //calculate this using the formula
+            //var objective_top = Cy + ((-relY) + offset_y - Cy)*Math.cos(angle_rad) + (relX + offset_x - Cx)*Math.sin(angle_rad); //calculate this using the formula
+
+            var objective_left = (center_left - clus_center_left)*Math.cos(angle_rad) - (center_top - clus_center_top)*Math.sin(angle_rad); //calculate this using the formula
+            var objective_top = (center_top - clus_center_top)*Math.cos(angle_rad) + (center_left - clus_center_left)*Math.sin(angle_rad); //calculate this using the formula
+
+            console.log("calculated new left is " + objective_left);
+            console.log("calculated new top is " + objective_top);
+            //to make left of ele = objective_left - actual_left
+            //make top of ele = objective top + actual_top
+            */
+
+
+            var calculated_left = (init_left + offset_x + relX);
+            var calculated_right = -(calculated_left);
+
+            //hardcoded
+
+            //calculated_left = -800;
+            //calculated_right = 800;
+
+            //adjustments because of default (870,0)
+            
+
+            moveableElement.style.left = (calculated_left) + "px";
+            console.log("set the moveable element left to:");
+            console.log(getComputedStyle(moveableElement).left);
+            moveableElement.style.right = (calculated_right) + "px";
+
+            var calculated_top = (init_top + offset_y + relY);
+            var calculated_bottom = -(calculated_top);
+
+            moveableElement.style.top = (calculated_top) + "px";
+            console.log("set the moveable element top to:");
+            console.log(getComputedStyle(moveableElement).top);
+            moveableElement.style.bottom = (calculated_bottom) + "px";
+
+            //end of translate to position
+
+            
+            
+
             frames[i + "_" + j] = new Scene.Frame({
-              translate: [0,0],
+              //translate: [0,0],
               width: myData[i].teams[j].sWidth + "px",
               height: myData[i].teams[j].sLength + "px",
               left: "0px",
@@ -253,7 +373,59 @@ for (var i in myData) {
               },
             });
 
+            //now rotate, commented FOR NOW
+
+            
+
+            var element_matrix = "matrix("+Math.cos(angle_rad)+", "+Math.sin(angle_rad)+", "+(-Math.sin(angle_rad))+", "+Math.cos(angle_rad)+", 0, 0)";
+            moveableElement.style.transform = element_matrix;
+            moveableElement.style.webkitTransform = element_matrix;
+
+            //dont rotate for now
+            frames[i + "_" + j].set("transform", "rotate", `${Angle}deg`);
+            
+            frames[i + "_" + j].set("left", getComputedStyle(moveableElement).left);
+            console.log("first rotation left set to");
+            console.log(frames[i + "_" + j].get("left"));
+
+            frames[i + "_" + j].set("right", getComputedStyle(moveableElement).right);
+            console.log("first rotation right set to");
+            console.log(frames[i + "_" + j].get("right"));
+
+            frames[i + "_" + j].set("top", getComputedStyle(moveableElement).top);
+            console.log("first rotation top set to");
+            console.log(frames[i + "_" + j].get("top"));
+
+            frames[i + "_" + j].set("bottom", getComputedStyle(moveableElement).bottom);
+            console.log("first rotation bottom set to");
+            console.log(frames[i + "_" + j].get("bottom"));
+
+            moveableElement.style.cssText = frames[i + "_" + j].toCSS();
+            
+
             attachEvents(moveable);
+
+
+            //commented out code
+
+            /*
+            if(moveable.id == "clus1_team1"){
+              moveableElement.style.left = 200 + "px";
+              console.log("set the moveable element left to:");
+              console.log(getComputedStyle(moveableElement).left);
+              moveableElement.style.right = (-200) + "px";
+            }
+            else{
+              moveableElement.style.left = (-200) + "px";
+              console.log("set the moveable element left to:");
+              console.log(getComputedStyle(moveableElement).left);
+              moveableElement.style.right = (200) + "px";
+            }
+            */
+
+            
+
+            
 
             //This section changes the x and y to the objective
             //formula: Rx = Cx + (Ox  * cos(θ)) - (Oy * sin(θ)), ox = width/2, Cy = center about which you are rotating
@@ -261,7 +433,9 @@ for (var i in myData) {
             //rotating point ()
             
             //vars involved: Cx, Cy, relX, relY, offset_x, offset_y
+            /*
             var angle_rad = Angle*(Math.PI / 180);
+            
             console.log("Cx from dict is " + Cx);
             console.log("Cy from dict is " + Cy);
             console.log("relX from dict is " + relX);
@@ -297,8 +471,8 @@ for (var i in myData) {
 
             //hardcoded
 
-            //calculated_left = 400;
-            //calculated_right = -400;
+            calculated_left = -800;
+            calculated_right = 800;
 
             //adjustments because of default (870,0)
 
@@ -311,8 +485,9 @@ for (var i in myData) {
             var calculated_bottom = (-(objective_top + offset_y));
             //hardcoded
 
-            //calculated_top = 400;
-            //calculated_bottom = -400;
+            calculated_top = 400;
+            calculated_bottom = -400;
+            console.log("THIS IS THE UPDATED CODE!");
 
             //adjustments, because we have to convert the bottom left point to top left point
 
@@ -328,14 +503,15 @@ for (var i in myData) {
             previous_transform[13] = calculated_top.toString();
             previous_transform = previous_transform.join(",");
             moveableElement.nextElementSibling.style.transform = previous_transform;
-            moveableElement.style = moveableElement.nextElementSibling.style;
+            //moveableElement.style = moveableElement.nextElementSibling.style;
             
             //end of x,y translation
+            */
             
             //Now, rotate angle
+
             
-            
-            
+            /*
             var element_matrix = "matrix("+Math.cos(angle_rad)+", "+Math.sin(angle_rad)+", "+(-Math.sin(angle_rad))+", "+Math.cos(angle_rad)+", 0, 0)";
             moveableElement.style.transform = element_matrix;
             moveableElement.style.webkitTransform = element_matrix;
@@ -359,7 +535,7 @@ for (var i in myData) {
             console.log(frames[i + "_" + j].get("bottom"));
 
             moveableElement.style.cssText = frames[i + "_" + j].toCSS();
-            
+            */
 
           }
         }
@@ -374,6 +550,79 @@ $(function() {
                   saveAs(blob, "Dashboard_2.png"); 
               });
       });
+  });
+});
+
+$(function() { 
+  $("#btnSave").click(function() { 
+    for (var i in myData) {
+        if (myData.hasOwnProperty(i)) {
+          console.log(i);
+            for(var j in (myData[i])["teams"]){
+              if(((myData[i])["teams"]).hasOwnProperty(j)){
+                console.log(j);
+
+                var id = i + "_" + j;
+                moveable_ele = document.getElementById(id)
+                control_box = moveable_ele.nextElementSibling
+                var st = getComputedStyle(document.getElementById(id));
+                var tr = st.getPropertyValue("-webkit-transform") ||
+                        st.getPropertyValue("-moz-transform") ||
+                        st.getPropertyValue("-ms-transform") ||
+                        st.getPropertyValue("-o-transform") ||
+                        st.getPropertyValue("transform") ||
+                        "fail...";
+
+                // With rotate(30deg)...
+                // matrix(0.866025, 0.5, -0.5, 0.866025, 0px, 0px)
+                //console.log('Matrix: ' + tr);
+
+                // rotation matrix - http://en.wikipedia.org/wiki/Rotation_matrix
+
+
+                var values = tr.split('(')[1];
+                    values = values.split(')')[0];
+                    values = values.split(',');
+                var a = parseFloat(values[0]);
+                var b = parseFloat(values[1]);
+                var c = parseFloat(values[2]);
+                var d = parseFloat(values[3]);
+                console.log(a);
+                console.log(b);
+
+                var scale = Math.sqrt(a*a + b*b);
+                console.log(scale);
+                
+
+                // arc sin, convert from radians to degrees, round
+                // DO NOT USE: see update below
+                var sin = b/scale;
+                var angle = Math.round(Math.asin(sin) * (180/Math.PI));
+
+                var real_left = (getComputedStyle(moveable_ele.nextElementSibling).transform.split(",")[12].slice(1));
+                var real_top = (getComputedStyle(moveable_ele.nextElementSibling).transform.split(",")[13].slice(1));
+
+                var scaleX = frames[id].get("transform", "scaleX") * delta1[id];
+                var scaleY = frames[id].get("transform", "scaleY") * delta2[id];
+                if(isNaN(scaleX)){
+                  scaleX = 1;
+                }
+
+                if(isNaN(scaleY)){
+                  scaleY = 1;
+                }
+
+                console.log(scaleX);
+                
+                console.log(scaleY);
+
+
+
+
+              }
+            }
+          }
+        }
   });
 });
 

@@ -162,8 +162,8 @@ def editAllocation(request, active, user):
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
 	allocation = {
     'clus1': {
-        'clusPos':{'x':500.0, 'y':400.0},
-        'clusAngle': 0.0,
+        'clusPos':{'x':400.0, 'y':400.0},
+        'clusAngle': 135.0,
 		'clusLength': 200.0,
 		'clusBreadth': 200.0,
         'teams':{
@@ -172,8 +172,8 @@ def editAllocation(request, active, user):
                   'industry':'industry1', 
                   'projectName':'project name 1', 
                   'sLength':100.0, 
-                  'sWidth':100.0, 
-                  'relativeX':0.0, 
+                  'sWidth':200.0, 
+                  'relativeX':100.0, 
                   'relativeY':0.0
                   },
             'team2': {
