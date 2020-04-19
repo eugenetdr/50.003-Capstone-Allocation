@@ -19,7 +19,8 @@
   <body>
     
   <h1>Edit</h1>
-  <input type="button" value="Save" id="btnSave2">
+  <input type="button" value="Save Allocation" id="btnSave2">
+    <input type="button" value="Download Image" id="btnSaveImage2">
 
     <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
     <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit First Floor">
@@ -31,5 +32,6 @@
   </div> 
 
 <script src="{% static 'js/resize2.js' %}" one='{{ allocation | safe }}'></script>
+<script src="{% static 'js/saveAllocation2.js' %}"></script>
 </body>
 </html>
