@@ -21,7 +21,7 @@
   <h1>Edit</h1>
     <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
     <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit First Floor">
-  <input type="button" value="Save Allocation" id="btnSave2">
+  <input type="button" value="Save Allocation" id="btnSave2" onclick="screenshot()">
     <input type="button" value="Download Image" id="btnSaveImage2">
 
     
@@ -49,6 +49,26 @@
                 }
               });
   }
+    function screenshot(){
+                html2canvas(document.getElementById("pageMain")).then(function(canvas) {
+                    img = canvas.toDataURL('image/png')
+                    // document.write('<img src="'+img+'"/>');
+                    console.log(img);
+                    $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type : 'POST',
+                            url :  "{% url 'edit2' adminID active %}",
+                            data : {'img': img},
+                            success : function(response){
+                        //reset the form after successful submit
+                              console.log("success! 1");
+                            },
+                            error : function(response){
+                              console.log(response)
+                            }
+                          });
+                });
+            }
   </script>
 
 <script src="{% static 'js/resize2.js' %}" one='{{ allocation | safe }}'></script>

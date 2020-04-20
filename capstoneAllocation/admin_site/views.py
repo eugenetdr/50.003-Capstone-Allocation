@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
-from .models import Admin, UploadedFiles, ReqData
+from .models import Admin, UploadedFiles, ReqData, AllocPic
 from .algorithm import run_Algorithm
 from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
@@ -14,7 +14,7 @@ import csv
 import json
 import string
 import random
-
+from base64 import b64decode
 
 ################### Custom Functions #############################
 
@@ -82,7 +82,12 @@ def index(request):
 
 def floorplan(request, active, user):
 	admin = Admin.objects.get(adminID=user)
-	context = {'adminID':user, 'active':active, 'floorplan': {'image':admin.getFp(admin.currLvl), 'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
+	nowLvl=admin.currLvl
+	print(admin.currLvl)
+	img =  AllocPic.objects.filter(lvl=nowLvl).last().alloc
+	
+	# admin.getFp(admin.currLvl)
+	context = {'adminID':user, 'active':active, 'floorplan': {'image':img, 'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
 			if 'runAlgo' in request.POST:
@@ -159,7 +164,11 @@ def approve(request, active, user):
 def editAllocation(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
-	
+	if request.method == 'POST':
+		print(request.POST['img'])
+		img = request.POST['img']
+		imgID = dt.now().strftime("%m%d%y-%H%M")
+		AllocPic(savedDT=imgID, lvl=1, alloc=img).save()
 	allocation = {
             'team1': {
                   'level': 1,
@@ -201,7 +210,11 @@ def editAllocation(request, active, user):
 def editAllocation2(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
-
+	if request.method == 'POST':
+		print(request.POST['img'])
+		img = request.POST['img']
+		imgID = dt.now().strftime("%m%d%y-%H%M")
+		AllocPic(savedDT=imgID, lvl=2, alloc=img).save()
 	allocation = {
             'team1': {
                   'level': 2,

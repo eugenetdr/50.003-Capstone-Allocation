@@ -296,3 +296,13 @@ class Project(models.Model):
 
 	def __str__(self):
 		return self.clusterID
+
+class AllocPic(models.Model):
+
+	savedDT = models.CharField(max_length=100)
+	lvl = models.FloatField(null=True)
+	alloc = models.TextField(null=True)
+
+	def __str__(self):
+		return self.savedDT
+		
