@@ -1,6 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import Admin, UploadedFiles, ReqData
 from .algorithm import run_Algorithm
 from requirements.models import Team, Request
@@ -158,71 +159,36 @@ def approve(request, active, user):
 def editAllocation(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
+	
 	allocation = {
-    'clus1': {
-        'clusPos':{'x':400.0, 'y':400.0},
-        'clusAngle': 135.0,
-		'clusLength': 200.0,
-		'clusBreadth': 200.0,
-        'teams':{
             'team1': {
-		  'level':1, 
+                  'level': 1,
                   'industry':'industry1', 
                   'projectName':'project name 1', 
                   'sLength':100.0, 
-                  'sWidth':200.0, 
-                  'relativeX':100.0, 
-                  'relativeY':0.0
-                  },
-            'team2': {
-		  'level':1, 
-                  'industry':'industry2', 
-                  'projectName':'project name 2', 
-                  'sLength':100.0, 
                   'sWidth':100.0, 
-                  'relativeX':0.0, 
-                  'relativeY':100.0
-                  }
-            }
-        },
-    'clus2': {
-        
-        'clusPos':{'x':0.0, 'y':0.0},
-        'clusAngle':0.0,
-		'clusLength': 200.0,
-		'clusBreadth': 200.0,
-        'teams':{
-            'team3': {
-		  'level':2,
-                  'industry':'industry3', 
-                  'projectName':'project name 3', 
-                  'sLength':0.0, 
-                  'sWidth':0.0, 
-                  'relativeX':0.0, 
-                  'relativeY':0.0
-                  },
-            'team4': {
-		  'level':2,
-                  'industry':'industry4', 
-                  'projectName':'project name 4', 
-                  'sLength':0.0, 
-                  'sWidth':0.0, 
-                  'relativeX':0.0, 
-                  'relativeY':0.0
-                  }
-            }
-        }
-    }
+                  'actualX':400.0, 
+                  'actualY':400.0,
+                  'angle':45.0
+                },
+            'team2': {
+                  'level': 1,
+                  'industry': 'industry2', 
+                  'projectName': 'project name 2', 
+                  'sLength': 200.0, 
+                  'sWidth': 200.0, 
+                  'actualX': 200.0, 
+                  'actualY': 200.0,
+                  'angle':45.0
+        	}
+		}
 
 	#loop through, keeping only those with level 1
 	lvl_1_allocation = {}
-	for cluster in list(allocation.keys()):
-		for team in list((allocation[cluster])["teams"].keys()):
-			if((((allocation[cluster])["teams"])[team])["level"] == 1):
-				if(cluster in list(lvl_1_allocation.keys())):
-					continue
-				else:
-				    lvl_1_allocation[cluster] = allocation[cluster]
+
+	for team in list(allocation.keys()):
+		if((allocation[team])["level"] == 1):
+			lvl_1_allocation[team] = allocation[team]
 
 	allocation_data = json.dumps(lvl_1_allocation)
 	context = {'adminID':user, 'active':active}
@@ -235,71 +201,36 @@ def editAllocation(request, active, user):
 def editAllocation2(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
+
 	allocation = {
-    'clus1': {
-        'clusPos':{'x':0.0, 'y':0.0},
-        'clusAngle': 0.0,
-		'clusLength': 200.0,
-		'clusBreadth': 200.0,
-        'teams':{
             'team1': {
-		  'level':1, 
+                  'level': 2,
                   'industry':'industry1', 
                   'projectName':'project name 1', 
-                  'sLength':0.0, 
-                  'sWidth':0.0, 
-                  'relativeX':0.0, 
-                  'relativeY':0.0
-                  },
+                  'sLength':100.0, 
+                  'sWidth':100.0, 
+                  'actualX':400.0, 
+                  'actualY':400.0,
+                  'angle':45.0
+                },
             'team2': {
-		  'level':1, 
-                  'industry':'industry2', 
-                  'projectName':'project name 2', 
-                  'sLength':0.0, 
-                  'sWidth':0.0, 
-                  'relativeX':0.0, 
-                  'relativeY':0.0
-                  }
-            }
-        },
-    'clus2': {
-        
-        'clusPos':{'x':0.0, 'y':0.0},
-        'clusAngle':0.0,
-		'clusLength': 200.0,
-		'clusBreadth': 200.0,
-        'teams':{
-            'team3': {
-		  'level':2,
-                  'industry':'industry3', 
-                  'projectName':'project name 3', 
-                  'sLength':0.0, 
-                  'sWidth':0.0, 
-                  'relativeX':0.0, 
-                  'relativeY':0.0
-                  },
-            'team4': {
-		  'level':2,
-                  'industry':'industry4', 
-                  'projectName':'project name 4', 
-                  'sLength':0.0, 
-                  'sWidth':0.0, 
-                  'relativeX':0.0, 
-                  'relativeY':0.0
-                  }
-            }
-        }
-    }
+                  'level': 2,
+                  'industry': 'industry2', 
+                  'projectName': 'project name 2', 
+                  'sLength': 200.0, 
+                  'sWidth': 200.0, 
+                  'actualX': 200.0, 
+                  'actualY': 200.0,
+                  'angle':45.0
+        	}
+		}
 
 	#loop through, keeping only those with level 2
 	lvl_2_allocation = {}
-	for cluster in list(allocation.keys()):
-		for team in list((allocation[cluster])["teams"].keys()):
-			if((((allocation[cluster])["teams"])[team])["level"] == 2):
-				if(cluster in list(lvl_2_allocation.keys())):
-					continue
-				else:
-				    lvl_2_allocation[cluster] = allocation[cluster]
+
+	for team in list(allocation.keys()):
+		if((allocation[team])["level"] == 2):
+			lvl_2_allocation[team] = allocation[team]
 
 	allocation_data = json.dumps(lvl_2_allocation)
 	context = {'adminID':user, 'active':active}
@@ -331,3 +262,23 @@ def logout(request, user):
 	admin.currLvl=1
 	admin.save()
 	return redirect('adminIndex')
+
+################### Space Allocation POST Request Functions################################
+
+#When the Level 1 allocation is saved
+def saveAllocation1(request, active, user):
+	if(request.method == 'POST'):
+		allocation_data = json.loads(request.body)
+		print(json.loads(allocation_data))
+		return JsonResponse({"success":True}, status=200)
+	return JsonResponse({"success":False}, status=400)
+
+#When level 2 allocation is saved
+def saveAllocation2(request, active, user):
+	if(request.method == 'POST'):
+		allocation_data = json.loads(request.body)
+		print(json.loads(allocation_data))
+		return JsonResponse({"success":True}, status=200)
+	return JsonResponse({"success":False}, status=400)
+
+#{'team1': {'level': 1, 'industry': 'industry1', 'projectName': 'project name 1', 'sLength': 100, 'sWidth': 100, 'actualX': '572', 'actualY': '0', 'angle': 45}, 'team2': {'level': 1, 'industry': 'industry2', 'projectName': 'project name 2', 'sLength': 100, 'sWidth': 100, 'actualX': '460.304', 'actualY': '270.304', 'angle': 0}}
