@@ -94,7 +94,7 @@ def floorplan(request, active, user):
 					output = run_Algorithm(data)
 					print("\n\n\n\n\n\n")
 					print(2)
-					alloc = output.return_cluster()
+					alloc = output.return_projects()
 					print("\n\n\n\n\n\n")
 					print(alloc)
 				except:

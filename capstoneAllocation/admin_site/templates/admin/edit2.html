@@ -19,13 +19,13 @@
   <body>
     
   <h1>Edit</h1>
+    <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
+    <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit First Floor">
   <input type="button" value="Save Allocation" id="btnSave2">
     <input type="button" value="Download Image" id="btnSaveImage2">
 
-    <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
-    <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit First Floor">
     
-    <div class="label" id="mainlabel"></div>>
+    <div class="label" id="mainlabel"></div>
     <div class="page main" id = "pageMain">
       <div class="container">
     </div>
