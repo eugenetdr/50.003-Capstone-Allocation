@@ -43,10 +43,10 @@ a {
 .moveable {
   font-family: "Roboto", sans-serif;
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 16.4px;
+  height: 16.4px;
   text-align: center;
-  font-size: 40px;
+  font-size: 6px;
   margin: 0px auto;
   font-weight: 100;
   letter-spacing: 1px;
