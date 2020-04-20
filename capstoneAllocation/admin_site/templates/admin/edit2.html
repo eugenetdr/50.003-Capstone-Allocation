@@ -25,11 +25,31 @@
     <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
     <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit First Floor">
     
-    <div class="label"></div>>
+    <div class="label" id="mainlabel"></div>>
     <div class="page main" id = "pageMain">
       <div class="container">
     </div>
   </div> 
+  <script>
+    var token = '{{csrf_token}}';
+    function sendAllocationData() {
+      var jsonOutput = document.getElementById("mainlabel").getAttribute("data-json");
+      console.log(jsonOutput);
+      $.ajax({
+                headers: { "X-CSRFToken": token },
+                type : 'POST',
+                url :  "{% url 'saveAllocation2' adminID active %}",
+                data : jsonOutput,
+                success : function(response){
+            //reset the form after successful submit
+                  console.log("success! 2");
+                },
+                error : function(response){
+                  console.log(response)
+                }
+              });
+  }
+  </script>
 
 <script src="{% static 'js/resize2.js' %}" one='{{ allocation | safe }}'></script>
 <script src="{% static 'js/saveAllocation2.js' %}"></script>

@@ -1,6 +1,7 @@
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import Admin, UploadedFiles, ReqData
 from .algorithm import run_Algorithm
 from requirements.models import Team, Request
@@ -262,3 +263,23 @@ def logout(request, user):
 	admin.status=0
 	admin.save()
 	return redirect('adminIndex')
+
+################### Space Allocation POST Request Functions################################
+
+#When the Level 1 allocation is saved
+def saveAllocation1(request, active, user):
+	if(request.method == 'POST'):
+		allocation_data = json.loads(request.body)
+		print(json.loads(allocation_data))
+		return JsonResponse({"success":True}, status=200)
+	return JsonResponse({"success":False}, status=400)
+
+#When level 2 allocation is saved
+def saveAllocation2(request, active, user):
+	if(request.method == 'POST'):
+		allocation_data = json.loads(request.body)
+		print(json.loads(allocation_data))
+		return JsonResponse({"success":True}, status=200)
+	return JsonResponse({"success":False}, status=400)
+
+#{'team1': {'level': 1, 'industry': 'industry1', 'projectName': 'project name 1', 'sLength': 100, 'sWidth': 100, 'actualX': '572', 'actualY': '0', 'angle': 45}, 'team2': {'level': 1, 'industry': 'industry2', 'projectName': 'project name 2', 'sLength': 100, 'sWidth': 100, 'actualX': '460.304', 'actualY': '270.304', 'angle': 0}}

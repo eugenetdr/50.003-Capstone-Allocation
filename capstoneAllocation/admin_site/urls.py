@@ -17,8 +17,12 @@ urlpatterns = [
     path('<str:user>/<int:active>/floorplan/confirmation/approve', views.approve, name='confirm'),
     # ex: /admin/1/floorplan/edit
     path('<str:user>/<int:active>/floorplan/edit/', views.editAllocation, name='edit'),
+    # ex: /admin/1/floorplan/sendFloorPlan1
+    path('<str:user>/<int:active>/floorplan/saveAllocation1/', views.saveAllocation1, name='saveAllocation1'),
     # ex: /admin/1/floorplan/edit2
     path('<str:user>/<int:active>/floorplan/edit2/', views.editAllocation2, name='edit2'),
+    # ex: /admin/1/floorplan/sendFloorPlan2
+    path('<str:user>/<int:active>/floorplan/saveAllocation2/', views.saveAllocation2, name='saveAllocation2'),
     # ex: /admin/1/floorplan/requirements
     path('<str:user>/<int:active>/floorplan/requirements/', views.viewRequirements, name='requirements'),
     # ex: /admin/logout

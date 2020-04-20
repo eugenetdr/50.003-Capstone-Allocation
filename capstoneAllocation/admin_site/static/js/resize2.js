@@ -617,8 +617,12 @@ $(function() {
               */
 
           }
-          console.log(myData);
+          
         }
+        var jsonOutput = JSON.stringify(myData);
+        document.getElementById("mainlabel").setAttribute("data-json", jsonOutput);
+        sendAllocationData();
+        console.log(myData);
   });
 });
 

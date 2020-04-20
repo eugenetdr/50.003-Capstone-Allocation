@@ -588,6 +588,10 @@ $(function() {
                 (myData[i])["angle"] = angle;
                 (myData[i])["actualX"] = real_left;
                 (myData[i])["actualY"] = real_top;
+
+                
+
+                
               /*
 
                 {
@@ -615,8 +619,12 @@ $(function() {
               */
 
           }
-          console.log(myData);
+          
         }
+        var jsonOutput = JSON.stringify(myData);
+        document.getElementById("mainlabel").setAttribute("data-json", jsonOutput);
+        sendAllocationData();
+        console.log(myData);
   });
 });
 
