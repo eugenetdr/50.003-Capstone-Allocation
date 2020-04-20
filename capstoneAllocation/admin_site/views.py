@@ -54,6 +54,8 @@ def resetEntries(year, numEntries):
 		req = Request(pk=i, teamID=t, yearOfGrad=year)
 		req.save()
 
+
+
 ################### View Functions################################
 def index(request):
 	user = None
@@ -79,7 +81,7 @@ def index(request):
 
 def floorplan(request, active, user):
 	admin = Admin.objects.get(adminID=user)
-	context = {'adminID':user, 'active':active}
+	context = {'adminID':user, 'active':active, 'floorplan': {'image':admin.getFp(admin.currLvl), 'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
 			if 'runAlgo' in request.POST:
@@ -96,6 +98,10 @@ def floorplan(request, active, user):
 					print(alloc)
 				except:
 					return HttpResponse("Invalid response present")
+			elif 'chgLvl' in request.POST:
+				admin.nxtFpLvl('set')
+				print(admin.currLvl)
+				return redirect('floorplan', user=admin, active=active)
 			else:
 				try:
 					request.FILES['myfile']
@@ -110,14 +116,6 @@ def floorplan(request, active, user):
 				except MultiValueDictKeyError:
 					return render('admin/floorplan.html', context)
 		return render(request, 'admin/floorplan.html', context)
-	else:
-		return redirect('adminIndex')
-
-def floorplan2(request, active, user):
-	admin = Admin.objects.get(adminID=user)
-	context = {'adminID':user, 'active':active}
-	if (active==admin.status) & (active==1):
-		return render(request, 'admin/floorplan2.html', context)
 	else:
 		return redirect('adminIndex')
 
@@ -329,6 +327,7 @@ def viewRequirements(request, active, user):
 
 def logout(request, user):
 	admin = Admin.objects.get(adminID=user)
-	admin.status=0
+	admin.logout()
+	admin.currLvl=1
 	admin.save()
 	return redirect('adminIndex')

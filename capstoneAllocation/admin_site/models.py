@@ -11,6 +11,7 @@ class Admin(models.Model):
 	adminID = models.CharField(max_length=100)
 	adminPW = models.CharField(max_length=100, default='password')
 	status = models.IntegerField(default=0)
+	currLvl = models.IntegerField(default=1)
 	isStaff = models.IntegerField(default=1)
 
 	def __str__(self):
@@ -40,6 +41,18 @@ class Admin(models.Model):
 		self.status=0
 		self.save()
 
+	def nxtFpLvl(self, mode):
+		if mode=='set':
+			self.currLvl = self.currLvl%2+1
+			self.save()
+		elif mode=='get':
+			return self.currLvl%2+1
+
+	def getFp(self, lvl):
+		if lvl == 1:
+			return 'images/lvl1floorplan.png'
+		elif lvl == 2:
+			return 'images/lvl2floorplan.png'
 	
 
 class UploadedFiles(models.Model):
