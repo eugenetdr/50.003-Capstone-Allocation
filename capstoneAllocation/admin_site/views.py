@@ -84,10 +84,14 @@ def floorplan(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	nowLvl=admin.currLvl
 	print(admin.currLvl)
-	img =  AllocPic.objects.filter(lvl=nowLvl).last().alloc
-	
+	try:
+		img =  AllocPic.objects.filter(lvl=nowLvl).last().alloc
+		context = {'adminID':user, 'active':active, 'floorplan': {'image':img, 'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
+	except:
+		print("No image yet!")
+		context = {'adminID':user, 'active':active, 'floorplan': {'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
 	# admin.getFp(admin.currLvl)
-	context = {'adminID':user, 'active':active, 'floorplan': {'image':img, 'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
+	
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
 			if 'runAlgo' in request.POST:
@@ -265,10 +269,13 @@ def editAllocation2(request, active, user):
                   'projectName':'project name 1', 
                   'sLength':100.0, 
                   'sWidth':100.0, 
-                  'actualX':400.0, 
-                  'actualY':400.0,
-                  'angle':45.0
-                },
+                  'actualX':200.0, 
+                  'actualY':200.0,
+                  'angle':0.0
+                }
+		}
+
+	"""
             'team2': {
                   'level': 2,
                   'industry': 'industry2', 
@@ -277,9 +284,9 @@ def editAllocation2(request, active, user):
                   'sWidth': 200.0, 
                   'actualX': 200.0, 
                   'actualY': 200.0,
-                  'angle':45.0
+                  'angle':0.0
         	}
-		}
+	"""
 
 	#loop through, keeping only those with level 2
 	lvl_2_allocation = {}

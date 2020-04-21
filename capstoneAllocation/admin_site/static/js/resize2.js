@@ -28,6 +28,15 @@ var i;
 var frames = {};
 var delta1 = {};
 var delta2 = {};
+var industry_colors = 
+{
+  'Logistics':'rgb(255,0,0)',
+  'Integrated Systems': 'rgb(0,255,0)',
+  'Defense':'rgb(0,0,255)',
+  'Architecture':'rgb(255,192,203)',
+  'Entrepreneurship':'rgb(255,255,0)',
+  'Internet Security':'rgb(148,0,211)'
+};
 
 function firstRotateTransform(target, i){
   frames[i].set("left", getComputedStyle(target).left);
@@ -75,6 +84,8 @@ function attachEvents(element){
   `);
     });
   }).on("drag", ({ target, left, top, clientX, clientY, isPinch}) => {
+    document.getElementById("toolTip"+(element.id)).style.visibility = "hidden";
+    //document.getElementById("toolTip"+(element.id)).disabled = true;
 
     i = element.id;
     
@@ -137,6 +148,8 @@ function attachEvents(element){
 
     setLabel(clientX, clientY, `X: ${clientX}px<br/>Y: ${clientY}px`);
   }).on("dragEnd", () => {
+    document.getElementById("toolTip"+(element.id)).style.visibility = null;
+    //document.getElementById("toolTip"+(element.id)).disabled = false;
     labelElement.style.display = "none";
   }).on("scaleEnd", () => {
     labelElement.style.display = "none";
@@ -155,25 +168,24 @@ function attachEvents(element){
 }
 
 //function to make box invisible upon double click
-function hideMoveable(e) {
+function hideMoveable(e, i) {
   //change moveable element level property here and save it!
-
-  e.target.nextElementSibling.style.visibility = "hidden";
-  e.target.setAttribute("data-level", "1");
-  e.target.style.visibility = "hidden";
+  document.getElementById(i).nextElementSibling.style.visibility = "hidden";
+  document.getElementById(i).setAttribute("data-level", "1");
+  document.getElementById(i).style.visibility = "hidden";
   // e.target -> element that was clicked
 }
 
 function initialShowDragbox(e, i){
-  console.log(i.id);
+  console.log(i);
   
   console.log('single clicked moveable!');
-  document.getElementById(i.id).nextElementSibling.style.visibility = "visible";
+  document.getElementById(i).nextElementSibling.style.visibility = "visible";
 }
 
-function toolTipHideMoveable(e){
+function toolTipHideMoveable(e,i){
   //change moveable element level property here and save it!
-  e.target.parentElement.nextElementSibling.style.visibility = "hidden";
+  document.getElementById(i).nextElementSibling.style.visibility = "hidden";
   e.target.parentElement.setAttribute("data-level", "1");
   e.target.parentElement.style.visibility = "hidden";
 }
@@ -190,8 +202,10 @@ for (var i in myData) {
         var projectName = myData[i].projectName;
 
         var projectNameSplit = projectName.split(" ");
-        var projectNameHTML = '<font size = "5">' + projectNameSplit.join('<br/>') + '</font>';
+        var projectNameHTML = '<font size = "0.1px">' + projectNameSplit.join('<br/>') + '</font>';
         console.log(projectNameHTML);
+
+        industryHTML = '<font size = "0.1px">' + industry + '</font>';
 
         var sLength = myData[i].sLength;
         var sWidth = myData[i].sWidth;
@@ -232,26 +246,41 @@ for (var i in myData) {
         //unique id for each project: clusteri_teamj = "cluster" + i + "_team" + j
         moveableElement.setAttribute("id", i);
         moveableElement.setAttribute("data-level", 2);
-        moveableElement.setAttribute("ondblclick","hideMoveable(event);");
-        moveableElement.setAttribute("onclick","initialShowDragbox(event, " + i + ");");
+        moveableElement.setAttribute("ondblclick","hideMoveable(event, " + "'" + i + "'" + ");");
+        moveableElement.setAttribute("onclick","initialShowDragbox(event, " + "'" + i + "'" + ");");
+        moveableElement.setAttribute("text-align", "center");
+
+        //background rectangle to have color
+        var backgroundRectangle = document.createElement("div"); 
+        backgroundRectangle.style.width = "16px";
+        backgroundRectangle.style.height = "16px";
+        backgroundRectangle.style.backgroundColor = industry_colors[industry];
+        backgroundRectangle.style.border = "1px solid #000";
+        //backgroundRectangle.setAttribute("vertical-align","middle");
+        //backgroundRectangle.setAttribute("horizontal-align","middle");
+        backgroundRectangle.setAttribute("display", "inline-block");
+
+        moveableElement.appendChild(backgroundRectangle);
+
         var toolTip = document.createElement("span");
         toolTip.setAttribute("class", "tooltiptext tooltip-top::after");
-        toolTip.appendChild(document.createTextNode(industry));
-        toolTip.style.fontSize = "20px";
-        toolTip.setAttribute("ondblclick","toolTipHideMoveable(event);");
+        toolTip.setAttribute("id", "toolTip"+i);
+        //toolTip.appendChild(document.createTextNode(industry));
+        
+        toolTip.innerHTML = projectNameHTML + "<br/>" + industryHTML;
+        toolTip.style.fontSize = "2px";
+        toolTip.setAttribute("ondblclick","toolTipHideMoveable(event, " + "'" + i + "'" + ");");
 
         var closeSpan = document.createElement("span");
         closeSpan.setAttribute("class","sr-only");
         closeSpan.setAttribute("id", "closeSpan"+i);
         
-        closeSpan.innerHTML = projectNameHTML;
-        //$('#'+"closeSpan"+i).html("haha what");
-        //closeSpan.html(projectName);
-        //closeSpan.appendChild(document.createTextNode(projectName));
+        //commented out the innerHTML, because projectname here is messy
+        ///closeSpan.innerHTML = projectNameHTML;
 
         moveableElement.appendChild(closeSpan);
         moveableElement.appendChild(toolTip);
-        moveableElement.style.backgroundColor = "red";
+        //moveableElement.style.backgroundColor = "red";
 
         container.appendChild(moveableElement);
         
@@ -294,7 +323,8 @@ for (var i in myData) {
         init_bottom = -(init_top);
 
         //commented out to not edit position at all
-        /*
+        
+        
         
         moveableElement.style.left = init_left + "px";
         moveableElement.style.top = init_top + "px";
@@ -318,16 +348,16 @@ for (var i in myData) {
         console.log("set the moveable element top to:");
         console.log(getComputedStyle(moveableElement).top);
         moveableElement.style.bottom = (calculated_bottom) + "px";
-        */
-
+        
+        
         //end of translate to position
 
         var angle_rad = angle*(Math.PI / 180);
 
         frames[i] = new Scene.Frame({
           //translate: [0,0],
-          width: "100px",
-          height: "100px",
+          width: "16.4px",
+          height: "16.4px",
           left: "0px",
           top: "0px",
           transform: {
@@ -359,8 +389,11 @@ for (var i in myData) {
 
         //scale up the frame by required factor, compared to 100px
 
-        var init_scaleX = parseFloat(sWidth)/100;
-        var init_scaleY = parseFloat(sLength)/100;
+        var init_scaleX = parseFloat(sWidth)/16.4;
+        var init_scaleY = parseFloat(sLength)/16.4;
+        console.log("SCALE X IS:" + init_scaleX);
+        console.log("SCALE Y IS:" + init_scaleY);
+
 
         frames[i].set("transform", "scaleX", init_scaleX);
         frames[i].set("transform", "scaleY", init_scaleY);
@@ -522,7 +555,7 @@ for (var i in myData) {
 }
 
 $(function() { 
-  $("#btnSave2").click(function() { 
+  $("#btnSave2").click(function() {
     for (var i in myData) {
         if (myData.hasOwnProperty(i)) {
           console.log(i);
@@ -581,15 +614,17 @@ $(function() {
                 console.log(scaleX);
                 
                 console.log(scaleY);
-
+                
                 (myData[i])["level"] = parseInt(moveable_ele.getAttribute("data-level"));
-                (myData[i])["sLength"] = 100*parseFloat(scaleY);
-                (myData[i])["sWidth"] = 100*parseFloat(scaleX);
+                (myData[i])["sLength"] = 16*parseFloat(scaleY);
+                (myData[i])["sWidth"] = 16*parseFloat(scaleX);
                 (myData[i])["angle"] = angle;
                 (myData[i])["actualX"] = real_left;
                 (myData[i])["actualY"] = real_top;
 
+                
 
+                
               /*
 
                 {
