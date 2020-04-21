@@ -248,6 +248,9 @@ class Allocation(models.Model):
 	def __str__(self):
 		return self.allocateDT
 
+	def unpackBinData(self):
+		return json.loads(self.allocation.decode('utf-8'))
+
 	def inputDB(self):
 		projects = json.loads(self.allocation.decode('utf-8'))
 		teamID = ''
@@ -270,7 +273,7 @@ class Allocation(models.Model):
 			actualX = projects[j]['actualX']
 			actualY = projects[j]['actualY']
 			angle = projects[j]['angle']
-			entry = projectNamels(
+			entry = Project(
 								teamID=teamID,
 								projLvl=projLvl,
 								industry = industry,
