@@ -88,6 +88,8 @@ function attachEvents(element){
     //document.getElementById("toolTip"+(element.id)).disabled = true;
 
     i = element.id;
+
+    frames[i].moved = true;
     
     //.getAttribute("class");
     frames[i].set("left", `${left}px`);
@@ -105,17 +107,23 @@ function attachEvents(element){
 
   }).on("scale", ({ target, delta, clientX, clientY, isPinch}) => {
     i = element.id;
+    
+    frames[i].resized = true;
+    
     delta1[i] =  delta[0];
     delta2[i] = delta[1];
     const scaleX = frames[i].get("transform", "scaleX") * delta[0];
     const scaleY = frames[i].get("transform", "scaleY") * delta[1];
     frames[i].set("transform", "scaleX", scaleX);
+    frames[i].scale_x_var = parseFloat(scaleX);
     frames[i].set("transform", "scaleY", scaleY);
+    frames[i].scale_y_var = parseFloat(scaleY);
     setTransform(target, i);
     !isPinch && setLabel(clientX, clientY, `S: ${scaleX.toFixed(2)}, ${scaleY.toFixed(2)}`);
 
   }).on("rotate", ({ target, beforeDelta, clientX, clientY, isPinch}) => {
     i = element.id;
+    frames[i].rotated = true;
     const deg = parseFloat(frames[i].get("transform", "rotate")) + beforeDelta;
 
     frames[i].set("transform", "rotate", `${deg}deg`);
@@ -132,6 +140,7 @@ function attachEvents(element){
 
     !isPinch && setLabel(clientX, clientY, `R: ${deg.toFixed(1)}`);
   }).on("resize", ({ target, width, height, clientX, clientY, isPinch}) => {
+    
     i = element.id;
     frames[i].set("width", `${width}px`);
     frames[i].set("height", `${height}px`);
@@ -212,6 +221,9 @@ for (var i in myData) {
         var actualX = myData[i].actualX;
         var actualY = myData[i].actualY;
         var angle = parseFloat(myData[i].angle);
+
+        var init_scaleX = parseFloat(sWidth)/16.4;
+        var init_scaleY = parseFloat(sLength)/16.4;
         
         
         /* var Cx = myData[i].clusPos.x;
@@ -305,6 +317,7 @@ for (var i in myData) {
         moveable.right = -1;
         moveable.moved = false;
         moveable.rotated = false;
+        
 
         console.log("the elements real left is: ");
         console.log(getComputedStyle(moveableElement.nextElementSibling).transform.split(",")[12].slice(1));
@@ -333,7 +346,7 @@ for (var i in myData) {
         
         
 
-        var calculated_left = init_left + actualX;
+        var calculated_left = init_left + actualX + (init_scaleX*6);
         var calculated_right = -(calculated_left);
 
         moveableElement.style.left = (calculated_left) + "px";
@@ -341,7 +354,7 @@ for (var i in myData) {
         console.log(getComputedStyle(moveableElement).left);
         moveableElement.style.right = (calculated_right) + "px";
 
-        var calculated_top = init_top + actualY;
+        var calculated_top = init_top + actualY + (init_scaleY*6);
         var calculated_bottom = -(calculated_top);
 
         moveableElement.style.top = (calculated_top) + "px";
@@ -373,6 +386,8 @@ for (var i in myData) {
           },
         });
 
+        
+
         //now rotate
 
         var element_matrix = "matrix("+Math.cos(angle_rad)+", "+Math.sin(angle_rad)+", "+(-Math.sin(angle_rad))+", "+Math.cos(angle_rad)+", 0, 0)";
@@ -389,8 +404,8 @@ for (var i in myData) {
 
         //scale up the frame by required factor, compared to 100px
 
-        var init_scaleX = parseFloat(sWidth)/16.4;
-        var init_scaleY = parseFloat(sLength)/16.4;
+        
+
         console.log("SCALE X IS:" + init_scaleX);
         console.log("SCALE Y IS:" + init_scaleY);
 
@@ -417,6 +432,10 @@ for (var i in myData) {
         console.log(frames[i].get("bottom"));
 
         moveableElement.style.cssText = frames[i].toCSS();
+
+        frames[i].moved = false;
+        frames[i].rotated = false;
+        frames[i].resized = false;
         
 
         attachEvents(moveable);
@@ -558,12 +577,12 @@ $(function() {
   $("#btnSave").click(function() {
     for (var i in myData) {
         if (myData.hasOwnProperty(i)) {
+          var id = "placeholder";
           console.log(i);
-
-
-                var id = i;
-                moveable_ele = document.getElementById(id)
-                control_box = moveable_ele.nextElementSibling
+                id = i;
+                moveable_ele = document.getElementById(id);
+                control_box = moveable_ele.nextElementSibling;
+                control_box.style.visibility = "hidden";
                 var st = getComputedStyle(document.getElementById(id));
                 var tr = st.getPropertyValue("-webkit-transform") ||
                         st.getPropertyValue("-moz-transform") ||
@@ -599,10 +618,18 @@ $(function() {
                 var angle = Math.round(Math.asin(sin) * (180/Math.PI));
 
                 var real_left = (getComputedStyle(moveable_ele.nextElementSibling).transform.split(",")[12].slice(1));
+                console.log("real left is " + real_left);
                 var real_top = (getComputedStyle(moveable_ele.nextElementSibling).transform.split(",")[13].slice(1));
+                console.log("real top is " + real_top);
 
-                var scaleX = frames[id].get("transform", "scaleX") * delta1[id];
-                var scaleY = frames[id].get("transform", "scaleY") * delta2[id];
+                var scaleX = frames[id].scale_x_var;
+                var scaleY = frames[id].scale_y_var;
+
+                console.log("scalex at first is: " + scaleX);
+                
+                console.log(scaleX);
+                console.log("scaley at first is: " + scaleY);
+                console.log(scaleY);
                 if(isNaN(scaleX)){
                   scaleX = 1;
                 }
@@ -616,12 +643,17 @@ $(function() {
                 console.log(scaleY);
                 
                 (myData[i])["level"] = parseInt(moveable_ele.getAttribute("data-level"));
+                if(frames[id].resized == true){
                 (myData[i])["sLength"] = 16*parseFloat(scaleY);
                 (myData[i])["sWidth"] = 16*parseFloat(scaleX);
+                }
+                if(frames[id].rotated == true){
                 (myData[i])["angle"] = angle;
-                (myData[i])["actualX"] = real_left;
-                (myData[i])["actualY"] = real_top;
-
+                }
+                if(frames[id].moved == true){
+                (myData[i])["actualX"] = parseFloat(real_left);
+                (myData[i])["actualY"] = parseFloat(real_top);
+                }   
                 
 
                 
