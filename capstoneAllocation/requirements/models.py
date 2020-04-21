@@ -55,9 +55,9 @@ class Team(models.Model):
 				tid = '20200'+str(i)
 			else:
 				tid = '2020'+str(i)
-			sLength=rand.choice([1,1.5,2,1,1.5,2,3])
-			sWidth=rand.choice([1,1.5,2,1,1.5,2,3])
-			sHeight=rand.choice([1,1.5,2,1,1.5,2,3])
+			sLength=rand.choice([1,1.5,2,1,1.5,2,1,1.5,2,3])
+			sWidth=rand.choice([1,1.5,2,1,1.5,2,1,1.5,2,3])
+			sHeight=rand.choice([1,1.5,2,1,1.5,2,1,1.5,2,3])
 			pLength=sLength-0.2
 			pWidth=sWidth-0.2
 			pHeight=sHeight-0.2

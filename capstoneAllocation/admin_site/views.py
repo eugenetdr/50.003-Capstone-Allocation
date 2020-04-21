@@ -94,14 +94,10 @@ def floorplan(request, active, user):
 				data = prepInput()
 				print(data)
 				try:
-					print("\n\n\n\n\n\n")
-					print(1)
 					output = run_Algorithm(data)
-					print("\n\n\n\n\n\n")
-					print(2)
 					alloc = output.return_projects()
-					print("\n\n\n\n\n\n")
-					print(alloc)
+					# print("\n\n\n\n\n\n")
+					# print(alloc)
 				except:
 					return HttpResponse("Invalid response present")
 			elif 'chgLvl' in request.POST:
