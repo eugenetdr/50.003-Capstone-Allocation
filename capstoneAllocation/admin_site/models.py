@@ -244,6 +244,7 @@ class ReqData(models.Model):
 class Allocation(models.Model):
 	allocateDT = models.DateTimeField(default=dt.now())
 	allocation = models.BinaryField()
+	lvl = models.FloatField()
 
 	def __str__(self):
 		return self.allocateDT
