@@ -26,12 +26,12 @@
         <form novalidate method="post" action="{% url 'checkForm' teamID active %}">
           {% csrf_token %}
           <br>
-          <p>Enter the details of your request below:</p>
+          <p><b>Enter the details of your request below:</b></p>
           <input required type="email" id="representativeEmail" class="fadeIn second" name="representativeEmail" placeholder="Representative Email" ><br>
           <span class="error" aria-live="polite"></span><br>
           <input required type="text" id="projectName" class="fadeIn third" name="projectName" placeholder="Project Name"><br>
           <span class="error" aria-live="polite"></span><br>
-          <p>Type of Prototype:</p>
+          <p><b>Type of Prototype:</b></p>
           <div>
             <input required type="radio" id="prototypeType1" onclick="document.getElementById('prototypeCustom').disabled = true;"
             name="prototypeType" value = "1:1"><label>1:1</label><br>
@@ -50,8 +50,19 @@
 
           </div><br>
           <input required type="text" class="fadeIn third" id = "industry" name = "industry" placeholder = "Type of Industry"><br><span class="error" aria-live="polite"></span><br>
-          
-          <p>Dimensions of Prototype:</p>
+          <p><b>Industry of your project:</b></p>
+          <select required id="industry" name="industry_dropdown">
+            <option value="Internet Security">Internet Security</option>
+            <option value="Robotics">Robotics</option>
+            <option value="Entrepreneurship">Entrepreneurship</option>
+            <option value="Architecture">Architecture</option>
+            <option value="Integrated Systems">Integrated Systems</option>
+            <option value="Defense">Defense</option>
+            <option value="Logistics">Logistics</option>
+            <option value="Mobile Application">Mobile Application</option>
+          </select><br>
+          <br>
+          <p><b>Dimensions of Prototype:</b></p>
           <div>
             <input required onclick="document.getElementById('prototypeLength').disabled = true;document.getElementById('prototypeWidth').disabled = true;document.getElementById('prototypeHeight').disabled = true;" type="radio" id="prototypeSize1"
             name="prototypeSize" value = "Small"><label>Small</label><br>
@@ -72,7 +83,7 @@
           
           </div><br>
 
-          <p>Dimensions of Showcase:</p>
+          <p><b>Dimensions of Showcase:</b></p>
           <div>
             <input required onclick="document.getElementById('showCaseLength').disabled = true;document.getElementById('showCaseWidth').disabled = true;document.getElementById('showCaseHeight').disabled = true;" type="radio" id="showCaseSize1"
             name="showcaseSize" value = "Small"><label>Small</label><br>
