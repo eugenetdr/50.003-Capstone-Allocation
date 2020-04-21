@@ -19,17 +19,19 @@
   <body>
     
   <h1>Edit</h1>
-    
-    <input type="button" value="Save Allocation" id="btnSave">
-    <input type="button" value="Download Image" id="btnSaveImage">
     <input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
     <input onclick="location.href='{% url 'edit2' adminID active %}'" type="button" value="Edit Second Floor">
-    <div class="label" id="mainlabel"></div>>
+    <input type="button" value="Save Allocation" id="btnSave" onclick="screenshot()">
+    <input type="button" value="Download Image" id="btnSaveImage">
+    <div class="label" id="mainlabel"></div>
     <div class="page main" id = "pageMain">
       <div class="container">
         <!--<img src="{% static 'images/lvl1floorplan.png' %}" class="center-fit">-->
     </div>
   </div> 
+  <script type="text/javascript">
+            
+  </script>
   <script>
     var token = '{{csrf_token}}';
     function sendAllocationData() {
@@ -49,6 +51,26 @@
                 }
               });
   }
+      function screenshot(){
+                html2canvas(document.getElementById("pageMain")).then(function(canvas) {
+                    img = canvas.toDataURL('image/png')
+                    // document.write('<img src="'+img+'"/>');
+                    console.log(img);
+                    $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type : 'POST',
+                            url :  "{% url 'edit' adminID active %}",
+                            data : {'img': img},
+                            success : function(response){
+                        //reset the form after successful submit
+                              console.log("success! 1");
+                            },
+                            error : function(response){
+                              console.log(response)
+                            }
+                          });
+                });
+            }
   </script>
 
 <script src="{% static 'js/resize.js' %}" one='{{ allocation | safe }}'></script>

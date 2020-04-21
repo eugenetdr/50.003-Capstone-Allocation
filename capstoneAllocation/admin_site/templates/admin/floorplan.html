@@ -8,7 +8,6 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/floorplan1.css' %}">
   </head>
   <body>
   	<h1>Floorplan Level 1</h1>
@@ -16,9 +15,9 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <input onclick="location.href='{% url 'requirements' adminID active %}'" type="button" value="View Requirements">
+      <input type="submit" class="btn" name="chgLvl" value="View Floorplan Level {{ floorplan.nxtLvl }}">
       <input onclick="location.href='{% url 'edit' adminID active %}'" type="button" value="Edit Floorplan Level 1">
       <input onclick="location.href='{% url 'edit2' adminID active %}'" type="button" value="Edit Floorplan Level 2">
-      <input onclick="location.href='{% url 'floorplan2' adminID active %}'" type="button" value="View Floorplan Level 2">
       <input onclick="location.href='{% url 'approve' adminID active %}'" type="button" value="Approve">
       <input onclick="location.href='{% url 'logout' adminID %}'" type="button" value="Logout">
       <input type="submit" class="btn" value="runAlgo" name="runAlgo">
@@ -26,11 +25,8 @@
       <input type="text" name="year" placeholder="Year of Grad" autocomplete="off">
       <button type="submit">Upload</button>
   </form>
-    <div class="page main" id = "pageMain">      
+    <div class="page main" id = "pageMain"> 
+      <img src='{{ floorplan.image }}' style="max-width:1920px;width:100%" >     
     </div>
-    <script>
-      document.getElementById("pageMain").style.backgroundImage = "{% static 'images/lvl1floorplan.png' %}";
-      document.getElementById("pageMain").style.backgroundImage = "{% static 'images/Dashboard.png' %}?{% now 'U' %}";
-      </script>
   </body>
 </html>

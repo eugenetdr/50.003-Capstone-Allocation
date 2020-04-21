@@ -11,6 +11,7 @@ class Admin(models.Model):
 	adminID = models.CharField(max_length=100)
 	adminPW = models.CharField(max_length=100, default='password')
 	status = models.IntegerField(default=0)
+	currLvl = models.IntegerField(default=1)
 	isStaff = models.IntegerField(default=1)
 
 	def __str__(self):
@@ -40,6 +41,18 @@ class Admin(models.Model):
 		self.status=0
 		self.save()
 
+	def nxtFpLvl(self, mode):
+		if mode=='set':
+			self.currLvl = self.currLvl%2+1
+			self.save()
+		elif mode=='get':
+			return self.currLvl%2+1
+
+	def getFp(self, lvl):
+		if lvl == 1:
+			return 'images/lvl1floorplan.png'
+		elif lvl == 2:
+			return 'images/lvl2floorplan.png'
 	
 
 class UploadedFiles(models.Model):
@@ -236,65 +249,60 @@ class Allocation(models.Model):
 		return self.allocateDT
 
 	def inputDB(self):
-		cluster = json.loads(self.allocation.decode('utf-8'))
-		clusLvl = 0.0
-		clusterID = ''
-		clusXPos = 0.0
-		clusYPos = 0.0
-		clusAngle = 0.0
+		projects = json.loads(self.allocation.decode('utf-8'))
 		teamID = ''
+		projLvl = 0.0
 		industry = ''
 		projectName = ''
 		sLength = 0.0
 		sWidth = 0.0
-		teamRelX = 0.0
-		teamRelY = 0.0
+		actualX = 0.0
+		actualY = 0.0
+		angle = 0.0
 
-		for i in cluster:
-			clusLvl = cluster[i]['level']
-			clusterID = i 
-			clusXPos = cluster[i]['clusPos']['x']
-			clusYPos = cluster[i]['clusPos']['y']
-			clusAngle = cluster[i]['clusAngle']
-			for j in cluster[i]['teams']:
-				  teamID = j
-				  industry = cluster[i]['teams'][j]['industry']
-				  projectName = cluster[i]['teams'][j]['projectName']
-				  sLength = cluster[i]['teams'][j]['sLength']
-				  sWidth = cluster[i]['teams'][j]['sWidth']
-				  teamRelX = cluster[i]['teams'][j]['relativeX']
-				  teamRelY = cluster[i]['teams'][j]['relativeY']
+		for j in projects:
+			teamID = j
+			projLvl = projects[j]['level']
+			industry = projects[j]['industry']
+			projectName = projects[j]['projectName']
+			sLength = projects[j]['sLength']
+			sWidth = projects[j]['sWidth']
+			actualX = projects[j]['actualX']
+			actualY = projects[j]['actualY']
+			angle = projects[j]['angle']
+			entry = projectNamels(
+								teamID=teamID,
+								projLvl=projLvl,
+								industry = industry,
+								projectName = projectName,
+								sLength = sLength,
+								sWidth = sWidth,
+								actualX = actualX,
+								actualY = actualY,
+								angle = angle
+								)
+			entry.save()
 
-				  entry = Cluster(
-				  					clusLvl = clusLvl,
-				  					clusterID=clusterID,
-				  					clusXPos=clusXPos,
-				  					clusYPos=clusYPos,
-				  					clusAngle = clusAngle,
-				  					teamID=teamID,
-				  					industry = industry,
-				  					projectName = projectName,
-				  					sLength = sLength,
-				  					sWidth = sWidth,
-				  					teamRelX=teamRelX,
-				  					teamRelY=teamRelY
-				  					)
-				  entry.save()
-
-class Cluster(models.Model):
-	allocateDT = models.DateTimeField(default=dt.now())
-	clusLvl = models.FloatField(null=True)
-	clusterID = models.CharField(max_length=100)
-	clusXPos = models.FloatField(null=True)
-	clusYPos = models.FloatField(null=True)
-	clusAngle = models.FloatField(null=True)
+class Project(models.Model):
 	teamID = models.CharField(max_length=100)
+	projLvl = models.FloatField(null=True)
 	industry = models.CharField(max_length=100)
 	projectName = models.CharField(max_length=100)
 	sLength = models.FloatField(null=True)
 	sWidth = models.FloatField(null=True)
-	teamRelX = models.FloatField(null=True)
-	teamRelY = models.FloatField(null=True)
+	actualX = models.FloatField(null=True)
+	actualY = models.FloatField(null=True)
+	angle = models.FloatField(null=True)
 
 	def __str__(self):
 		return self.clusterID
+
+class AllocPic(models.Model):
+
+	savedDT = models.CharField(max_length=100)
+	lvl = models.FloatField(null=True)
+	alloc = models.TextField(null=True)
+
+	def __str__(self):
+		return self.savedDT
+		

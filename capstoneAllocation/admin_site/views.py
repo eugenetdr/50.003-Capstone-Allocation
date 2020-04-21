@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
-from .models import Admin, UploadedFiles, ReqData
+from .models import Admin, UploadedFiles, ReqData, AllocPic
 from .algorithm import run_Algorithm
 from requirements.models import Team, Request
 from django.core.files.storage import FileSystemStorage
@@ -14,7 +14,7 @@ import csv
 import json
 import string
 import random
-
+from base64 import b64decode
 
 ################### Custom Functions #############################
 
@@ -55,6 +55,8 @@ def resetEntries(year, numEntries):
 		req = Request(pk=i, teamID=t, yearOfGrad=year)
 		req.save()
 
+
+
 ################### View Functions################################
 def index(request):
 	user = None
@@ -80,7 +82,12 @@ def index(request):
 
 def floorplan(request, active, user):
 	admin = Admin.objects.get(adminID=user)
-	context = {'adminID':user, 'active':active}
+	nowLvl=admin.currLvl
+	print(admin.currLvl)
+	img =  AllocPic.objects.filter(lvl=nowLvl).last().alloc
+	
+	# admin.getFp(admin.currLvl)
+	context = {'adminID':user, 'active':active, 'floorplan': {'image':img, 'currLvl':admin.currLvl, 'nxtLvl': admin.nxtFpLvl('get')}}
 	if (active==admin.status) & (active==1):
 		if request.method == 'POST':
 			if 'runAlgo' in request.POST:
@@ -92,11 +99,15 @@ def floorplan(request, active, user):
 					output = run_Algorithm(data)
 					print("\n\n\n\n\n\n")
 					print(2)
-					alloc = output.return_cluster()
+					alloc = output.return_projects()
 					print("\n\n\n\n\n\n")
 					print(alloc)
 				except:
 					return HttpResponse("Invalid response present")
+			elif 'chgLvl' in request.POST:
+				admin.nxtFpLvl('set')
+				print(admin.currLvl)
+				return redirect('floorplan', user=admin, active=active)
 			else:
 				try:
 					request.FILES['myfile']
@@ -111,14 +122,6 @@ def floorplan(request, active, user):
 				except MultiValueDictKeyError:
 					return render('admin/floorplan.html', context)
 		return render(request, 'admin/floorplan.html', context)
-	else:
-		return redirect('adminIndex')
-
-def floorplan2(request, active, user):
-	admin = Admin.objects.get(adminID=user)
-	context = {'adminID':user, 'active':active}
-	if (active==admin.status) & (active==1):
-		return render(request, 'admin/floorplan2.html', context)
 	else:
 		return redirect('adminIndex')
 
@@ -161,6 +164,11 @@ def approve(request, active, user):
 def editAllocation(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
+	if request.method == 'POST':
+		print(request.POST['img'])
+		img = request.POST['img']
+		imgID = dt.now().strftime("%m%d%y-%H%M")
+		AllocPic(savedDT=imgID, lvl=1, alloc=img).save()
 	"""
 	allocation = {
             'team1': {
@@ -245,7 +253,11 @@ def editAllocation(request, active, user):
 def editAllocation2(request, active, user):
 	admin = Admin.objects.get(adminID=user)
 	#TODO: call API to get current allocation from db, to get teams that are in level 1
-
+	if request.method == 'POST':
+		print(request.POST['img'])
+		img = request.POST['img']
+		imgID = dt.now().strftime("%m%d%y-%H%M")
+		AllocPic(savedDT=imgID, lvl=2, alloc=img).save()
 	allocation = {
             'team1': {
                   'level': 2,
@@ -302,7 +314,8 @@ def viewRequirements(request, active, user):
 
 def logout(request, user):
 	admin = Admin.objects.get(adminID=user)
-	admin.status=0
+	admin.logout()
+	admin.currLvl=1
 	admin.save()
 	return redirect('adminIndex')
 

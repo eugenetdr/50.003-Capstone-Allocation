@@ -7,8 +7,6 @@ urlpatterns = [
     path('', views.index, name='adminIndex'),
     # ex: /admin/1/floorplan/
     path('<str:user>/<int:active>/floorplan/', views.floorplan, name='floorplan'),
-    # ex: /admin/1/floorplan/
-    path('<str:user>/<int:active>/floorplan2/', views.floorplan2, name='floorplan2'),
     # ex: /admin/logout
     path('<str:user>/logout/', views.logout, name='logout'),
     # ex: /admin/1/floorplan/confirmation
