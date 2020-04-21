@@ -689,8 +689,13 @@ $(function() {
         var jsonOutput = JSON.stringify(myData);
         document.getElementById("mainlabel").setAttribute("data-json", jsonOutput);
         sendAllocationData();
+        screenshot();
         console.log(myData);
   });
+
+
+            
+
 });
 
   //n cluster i
