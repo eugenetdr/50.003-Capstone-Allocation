@@ -2,7 +2,10 @@
 {% load static %}
 <html>
   <head>
-    <meta charset="utf-8">
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/request.css' %}">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <title>View Requirements</title>
 
   <style>
@@ -28,7 +31,7 @@
   	
   	<form method="get">
   		<input onclick="location.href='{% url 'floorplan' adminID active %}'" type="button" value="Home">
-   	  <label for="yearOfGrad">Year Of Graduation:</label>
+   	  <label for="yearOfGrad"><b>Year Of Graduation:</b></label>
       <select id="yearOfGrad" name="yearOfGrad">
       	<option disabled selected value> -- select an option -- </option>
       	{% for year in years %}
@@ -38,8 +41,8 @@
       <input type="submit" >
     </form>
 
-	<table>
-		<tr>
+	<table class="table table-hover">
+		<tr class="table-info">
 			<th>Team ID</th>
 			<th>Project Name</th>
 			<th>Project Type</th>
