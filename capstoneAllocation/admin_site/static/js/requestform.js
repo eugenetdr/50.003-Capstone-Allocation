@@ -11,7 +11,8 @@ const form  = document.getElementsByTagName('form')[0];
 
 //Enter all the inputs you want to check for:
 
-const submit = document.querySelectorAll("input[value='Submit Space Request']");
+const submit = document.querySelectorAll("input[value='Submit Space Request']")[0];
+console.log("Able to use submit button" + submit.value);
 
 const email = document.getElementById('representativeEmail');
 const projectName = document.getElementById('projectName');
@@ -41,7 +42,7 @@ const showcaseLength = document.getElementById('showCaseLength');
 const showcaseWidth = document.getElementById('showCaseWidth');
 const showcaseHeight = document.getElementById('showCaseHeight');
 
-const powerpoints = document.getElementById('powerpoints');
+const powerpoints = document.querySelectorAll("input[name='powerpoints']")[0];
 const bigPedestals = document.getElementById('bigPedestals');
 const smallPedestals = document.getElementById('smallPedestals');
 const pedestalDescription = document.getElementById('pedestalDescription');
@@ -51,7 +52,6 @@ const tables = document.getElementById('tables');
 const chairs = document.getElementById('chairs');
 const HDMIAdaptors = document.getElementById('HDMIAdaptors');
 const others = document.getElementById('others');
-const remarks = document.getElementById('remarks');
 
 
 
@@ -81,7 +81,6 @@ const tablesError = document.querySelector('#tables + br + span.error');
 const chairsError = document.querySelector('#chairs + br + span.error');
 const HDMIAdaptorsError = document.querySelector('#HDMIAdaptors + br + span.error');
 const othersError = document.querySelector('#others + br + span.error');
-const remarksError = document.querySelector('#remarks + br + span.error');
 
 //now use above functions to add the listeners to their corresponding objects
 
@@ -89,7 +88,7 @@ emailListener(email, emailError); stringListener(projectName, projectNameError);
 numberListener(prototypeWidth, prototypeWidthError); numberListener(prototypeHeight, prototypeHeightError); numberListener(showcaseLength, showcaseLengthError); numberListener(showcaseWidth, showcaseWidthError);
 numberListener(showcaseHeight, showcaseHeightError); numberListener(powerpoints, powerpointsError); numberListener(bigPedestals, bigPedestalsError); numberListener(smallPedestals, smallPedestalsError);
 stringListener(pedestalDescription, pedestalDescriptionError); numberListener(monitors, monitorsError); numberListener(TVs, TVsError); numberListener(tables, tablesError);
-numberListener(chairs, chairsError); numberListener(HDMIAdaptors, HDMIAdaptorsError); stringListener(others, othersError); stringListener(remarks, remarksError);
+numberListener(chairs, chairsError); numberListener(HDMIAdaptors, HDMIAdaptorsError); stringListener(others, othersError);
 
 stringListener(prototypeCustom, prototypeCustomError); 
 
@@ -106,7 +105,7 @@ form.addEventListener('submit', function (event) {
   if(!pedestalDescription.validity.valid) {showStringError(pedestalDescription, pedestalDescriptionError);flag = 1;} if(!monitors.validity.valid) {showNumberError(monitors, monitorsError);flag = 1;} 
   if(!TVs.validity.valid) {showNumberError(TVs, TVsError);flag = 1;} if(!tables.validity.valid) {showNumberError(tables, tablesError);flag = 1;}
   if(!chairs.validity.valid) {showNumberError(chairs, chairsError);flag = 1;} if(!HDMIAdaptors.validity.valid) {showNumberError(HDMIAdaptors, HDMIAdaptorsError);flag = 1;} 
-  if(!others.validity.valid) {showStringError(others, othersError);flag = 1;} if(!remarks.validity.valid) {showStringError(remarks, remarksError);flag = 1;}
+  if(!others.validity.valid) {showStringError(others, othersError);flag = 1;}
   //if(!prototypeType.validity.valid) {showStringError(prototypeType, prototypeTypeError);flag = 1;}
   // 
   // Then we prevent the form from being sent by canceling the event
@@ -118,8 +117,8 @@ form.addEventListener('submit', function (event) {
 
 //3 types of functions: email, string, number
 function stringListener(string, ErrorObject){
-    console.log("Now listening for string: ")
-    console.log(string.id);
+    console.log("Now listening for string: ");
+    console.log(string.getAttribute("id"));
 ;
 
     string.addEventListener('input', function (event) {
@@ -131,19 +130,19 @@ function stringListener(string, ErrorObject){
           // is valid, we remove the error message.
           ErrorObject.innerHTML = ''; // Reset the content of the message
           ErrorObject.className = 'error'; // Reset the visual state of the message
-          submit.disabled = false;
+          document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = false;
         }
         else {
           // If there is still an error, show the correct error
           showStringError(string, ErrorObject);
-          submit.disabled = true;
+          document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = true;
         }
       });
 }
 
 function numberListener(numerical, ErrorObject){
-    console.log("Now listening for number: ")
-    console.log(numerical.id);
+    console.log("Now listening for number: ");
+    console.log(numerical.getAttribute("id"));
 
     numerical.addEventListener('input', function (event) {
         // Each time the user types something, we check if the
@@ -154,18 +153,19 @@ function numberListener(numerical, ErrorObject){
           // is valid, we remove the error message.
           ErrorObject.innerHTML = ''; // Reset the content of the message
           ErrorObject.className = 'error'; // Reset the visual state of the message
-          submit.disabled = false;
+          document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = false;
         }
         else {
           // If there is still an error, show the correct error
-          submit.disabled = true;
+          document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = true;
           showNumberError(numerical, ErrorObject);
         }
       });
 }
 
 function emailListener(email, ErrorObject){
-    console.log("Now listening for email: ")
+    console.log("Now listening for email: ");
+    console.log(email.getAttribute("id"));
 
     email.addEventListener('input', function (event) {
     // Each time the user types something, we check if the
@@ -176,17 +176,16 @@ function emailListener(email, ErrorObject){
         // is valid, we remove the error message.
         ErrorObject.innerHTML = ''; // Reset the content of the message
         ErrorObject.className = 'error'; // Reset the visual state of the message
-        submit.disabled = false;
+        document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = false;
     }
     else {
         // If there is still an error, show the correct error
         showEmailError(email, ErrorObject);
-        submit.disabled = true;
+        document.querySelectorAll("input[value='Submit Space Request']")[0]s.disabled = true;
     }
     });
 }
 
-//redundant now
 function showEmailError(email, ErrorObject) {
   if(email.validity.valueMissing) {
     // If the field is empty

@@ -24,7 +24,8 @@ public class escSeleniumTest {
     public static void main(String[] args) throws InterruptedException {
 
 
-        System.setProperty("webdriver.chrome.driver", "C:/Users/Fion/Desktop/Term 5/50.003 ESC/pset3/chromedriver.exe");
+        //System.setProperty("webdriver.chrome.driver", "C:/Users/Fion/Desktop/Term 5/50.003 ESC/pset3/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         WebDriver driver = new ChromeDriver();
 
         driver.get("http://127.0.0.1:8000/");
