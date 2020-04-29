@@ -5,7 +5,7 @@ from datetime import datetime
 from selenium.webdriver.common.action_chains import ActionChains
 import time
 import random as random
-from constants import *
+from generate_inputs import *
 
 def click_input_by_type_value(driver, input_type, value):
     button = driver.find_elements_by_xpath("//input[@" + input_type + "='" + value + "']")[0]
@@ -58,7 +58,7 @@ def edit_request(driver, log_string, recurse_count):
 
         #submit = get_input_by_type_value("value", "Submit Space Request") #driver.find_elements_by_xpath("//input[@value='Submit Space Request']")[0]
 
-        values = formvals[0]
+        values = formvals[int(random.random()*len(formvals))]
 
         for i in range(len(ids)):
             current_input = driver.find_elements_by_xpath("//input[@id='" + ids[i] + "']")[0]
@@ -74,6 +74,12 @@ def edit_request(driver, log_string, recurse_count):
             current_input.send_keys("Architecture")
         except:
             print("No Industry Text field.")
+        
+        submit = driver.find_elements_by_xpath("//input[@value='Submit Space Request']")[0]
+        submit_enabled = submit.get_property('disabled')
+        print(submit_enabled)
+        if(submit_enabled!=True):
+            print("Test showed bad inputs!")
         
         click_input_by_type_value(driver, "value", "Submit Space Request")
         review_after_edit(driver, log_string, recurse_count)

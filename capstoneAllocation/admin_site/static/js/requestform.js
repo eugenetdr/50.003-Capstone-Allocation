@@ -42,14 +42,14 @@ const showcaseLength = document.getElementById('showCaseLength');
 const showcaseWidth = document.getElementById('showCaseWidth');
 const showcaseHeight = document.getElementById('showCaseHeight');
 
-const powerpoints = document.querySelectorAll("input[name='powerpoints']")[0];
-const bigPedestals = document.getElementById('bigPedestals');
-const smallPedestals = document.getElementById('smallPedestals');
+const powerpoints = document.getElementById('powerpoints');
+const bigPedestals = document.getElementById('bigPedestals'); //max 5
+const smallPedestals = document.getElementById('smallPedestals'); //max 5
 const pedestalDescription = document.getElementById('pedestalDescription');
-const monitors = document.getElementById('monitors');
-const TVs = document.getElementById('TVs');
-const tables = document.getElementById('tables');
-const chairs = document.getElementById('chairs');
+const monitors = document.getElementById('monitors'); //max 2
+const TVs = document.getElementById('TVs'); //max 1
+const tables = document.getElementById('tables'); //max 3
+const chairs = document.getElementById('chairs'); //max 3
 const HDMIAdaptors = document.getElementById('HDMIAdaptors');
 const others = document.getElementById('others');
 
@@ -142,14 +142,47 @@ function stringListener(string, ErrorObject){
 
 function numberListener(numerical, ErrorObject){
     console.log("Now listening for number: ");
-    console.log(numerical.getAttribute("id"));
+    
+
+    
 
     numerical.addEventListener('input', function (event) {
         // Each time the user types something, we check if the
         // form fields are valid.
+
+        var id = (numerical.getAttribute("id"));
+        var value = numerical.value;
+        var name = (numerical.getAttribute("name"));
+
+        powerpoints = (id == 'powerpoints' && value <= 4);
+        bigPedestals = (id == 'bigPedestals' && value <= 5);
+        smallPedestals = (id == 'smallPedestals' && value <= 5);
+        monitors = (id == 'monitors' && value <= 2);
+        TVs = (id == 'TVs' && value <= 1);
+        tables = (id == 'tables' && value <= 3)
+        chairs = (id == 'chairs' && value <= 3)
+        HMDI = (id = 'HDMIAdaptors' && value <= 3)
+
+        var bool = (powerpoints ||
+          bigPedestals ||
+          smallPedestals ||
+          monitors ||
+          TVs ||
+          tables ||
+          chairs ||
+          HMDI);
+    
+        console.log({'powerpoints': powerpoints,
+        'bigPedestals':bigPedestals,
+        'smallPedestals': smallPedestals,
+        'monitors': monitors,
+        'TVs': TVs,
+        'tables': tables,
+        'chairs': chairs,
+        'HMDI': HMDI});
         
       
-        if (numerical.validity.valid && (numerical.value >= 0.0)) {
+        if (numerical.validity.valid && (numerical.value >= 0.0) && bool) {
           // is valid, we remove the error message.
           ErrorObject.innerHTML = ''; // Reset the content of the message
           ErrorObject.className = 'error'; // Reset the visual state of the message
@@ -158,6 +191,19 @@ function numberListener(numerical, ErrorObject){
         else {
           // If there is still an error, show the correct error
           document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = true;
+          if(!bool){
+            console.log("bool is");
+            console.log(bool);
+            console.log("id is");
+            console.log(id);
+            numerical.errorMsgBool = true;
+            console.log("The error causing value is ");
+            console.log(numerical.value);
+            numerical.errorMsg = "Value entered is more than allowed limit!"
+          }
+          else{
+            numerical.errorMsgBool = false;
+          }
           showNumberError(numerical, ErrorObject);
         }
       });
@@ -181,7 +227,7 @@ function emailListener(email, ErrorObject){
     else {
         // If there is still an error, show the correct error
         showEmailError(email, ErrorObject);
-        document.querySelectorAll("input[value='Submit Space Request']")[0]s.disabled = true;
+        document.querySelectorAll("input[value='Submit Space Request']")[0].disabled = true;
     }
     });
 }
@@ -231,6 +277,9 @@ function showNumberError(numerical, ErrorObject){
         // If the field doesn't contain an email address
         // display the following error message.
         ErrorObject.textContent = 'Entered value needs to be a valid number.';  
+        }
+        else if(numerical.errorMsgBool){
+          ErrorObject.textContent = numerical.errorMsg;
         }
         // Set the styling appropriately
         ErrorObject.className = 'error active';

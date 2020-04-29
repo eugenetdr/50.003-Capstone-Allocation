@@ -65,6 +65,20 @@ def edit_floorplan(driver, log_string, recurse_count, level, first):
         click_input_by_type_value(driver, "value", floorplan_lvls[level])
     if(recurse_count > 10):
         return_home(driver, log_string, recurse_count)
+    
+    #move all elements
+    
+    source_elements = driver.find_elements_by_xpath("//div[@class='moveable']")
+    for element in source_elements:
+        try:
+            ActionChains(driver).drag_and_drop_by_offset(element, random.random()*100,random.random()*100).perform()
+            print("Made edit!")
+            time.sleep(0.01)
+        except Exception as e:
+            print(e)
+            continue
+
+
     val = random.random()
     print(val)
     if(val<=0.5):
